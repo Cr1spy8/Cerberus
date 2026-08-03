@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-08-03T17:35:45.291791-04:00",
+  "interface": "eth0",
+  "local_address": "192.168.233.135/24",
+  "network": "192.168.233.0/24",
+  "host_count": 4,
+  "hosts": [
+    {
+      "ip_address": "192.168.233.1",
+      "hostname": "",
+      "status": "up",
+      "reason": "arp-response"
+    },
+    {
+      "ip_address": "192.168.233.2",
+      "hostname": "",
+      "status": "up",
+      "reason": "arp-response"
+    },
+    {
+      "ip_address": "192.168.233.254",
+      "hostname": "",
+      "status": "up",
+      "reason": "arp-response"
+    },
+    {
+      "ip_address": "192.168.233.135",
+      "hostname": "",
+      "status": "up",
+      "reason": "localhost-response"
+    }
+  ]
+}
