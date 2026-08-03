@@ -133,6 +133,49 @@ Cerberus/
 ---
 
 ## Planned Modules
+Module 001 — Network Discovery
+Status: ✅ Complete
+
+Purpose:
+- Detect active network interface
+- Identify local subnet
+- Discover live hosts
+- Save JSON scan results
+
+Features:
+- Automatic interface detection
+- ARP/host discovery
+- JSON output
+- CLI integration
+- Persistent scan storage
+
+Module 002 — Persistent Inventory
+Status: ✅ Complete
+
+Purpose: Maintain a living database of discovered hosts
+
+Features:
+- Tracks first seen
+- Tracks last seen
+- Counts sightings
+- Updates automatically after discovery
+- JSON inventory
+- Service storage
+- Scan timestamps
+
+Module 003 — Port Scanner
+Status: ✅ Complete
+
+Purpose: Enumerate TCP services on discovered hosts
+
+Features:
+- Inventory-based target selection
+- Nmap integration
+- XML parsing
+- JSON reports
+- Inventory enrichment
+- Service/version detection
+- Structured output
 
 ### Reconnaissance
 
@@ -209,3 +252,19 @@ while remaining portable enough to operate from low-cost embedded hardware.
 Development Project
 
 Built for cybersecurity education, research, and authorized penetration testing.
+
+## Asset Profiler
+
+Cerberus enriches discovered hosts with additional identity and classification data.
+
+The profiler can record:
+
+- Hostname
+- MAC address
+- Network-interface vendor
+- Probable device type
+- Probable operating-system family
+- Service and port tags
+- Evidence supporting each classification
+
+Profile conclusions are treated as estimates unless confirmed by stronger scan evidence.

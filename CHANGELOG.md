@@ -104,3 +104,19 @@ Project initialized following a documentation-first approach. No hardware modifi
 7. Settings — planned
 
 
+## v2.7 — Asset Profiler
+
+### Added
+
+- Added Module 004: Asset Profiler.
+- Added reverse-hostname resolution.
+- Added local-network MAC address collection.
+- Added MAC vendor identification when available.
+- Added service-based operating-system family inference.
+- Added broad device-type classification.
+- Added evidence-backed asset tags.
+- Added structured asset-profile JSON storage.
+- Added asset profile enrichment to the persistent inventory.
+- Integrated the profiler into the Cerberus appliance menu.
+
+

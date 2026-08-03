@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from __future__ import annotations
+from dataclasses import asdict, dataclass, field
 
 import json
 from dataclasses import asdict, dataclass
@@ -18,7 +19,6 @@ INVENTORY_PATH = INVENTORY_DIRECTORY / "hosts.json"
 class InventoryError(RuntimeError):
     """Raised when the Cerberus inventory cannot be processed."""
 
-
 @dataclass
 class InventoryHost:
     ip_address: str
@@ -28,6 +28,14 @@ class InventoryHost:
     first_seen: str
     last_seen: str
     sightings: int
+    services: list[dict[str, object]] = field(default_factory=list)
+    last_scanned: str = ""
+    mac_address: str = ""
+    vendor: str = ""
+    device_type: str = "unknown"
+    operating_system: str = "unknown"
+    tags: list[str] = field(default_factory=list)
+    last_profiled: str = ""
 
 
 def load_inventory() -> dict[str, InventoryHost]:
@@ -47,6 +55,15 @@ def load_inventory() -> dict[str, InventoryHost]:
     hosts: dict[str, InventoryHost] = {}
 
     for item in raw_data.get("hosts", []):
+        item.setdefault("services", [])
+        item.setdefault("last_scanned", "")
+        item.setdefault("mac_address", "")
+        item.setdefault("vendor", "")
+        item.setdefault("device_type", "unknown")
+        item.setdefault("operating_system", "unknown")
+        item.setdefault("tags", [])
+        item.setdefault("last_profiled", "")
+
         host = InventoryHost(**item)
         hosts[host.ip_address] = host
 
@@ -128,3 +145,57 @@ def save_inventory(
         ) from error
 
     return INVENTORY_PATH
+
+def update_host_services(
+    ip_address: str,
+    services: list[dict[str, object]],
+    scanned_at: str,
+) -> Path:
+    """Store port-scan intelligence for an inventory host."""
+    inventory = load_inventory()
+    host = inventory.get(ip_address)
+
+    if host is None:
+        raise InventoryError(
+            f"{ip_address} does not exist in the Cerberus inventory."
+        )
+
+        host.services = services
+        host.last_scanned = scanned_at
+
+    return save_inventory(inventory)
+def update_host_profile(
+    ip_address: str,
+    *,
+    hostname: str,
+    mac_address: str,
+    vendor: str,
+    device_type: str,
+    operating_system: str,
+    tags: list[str],
+    profiled_at: str,
+) -> Path:
+    """Store profiling intelligence for an inventory host."""
+    inventory = load_inventory()
+    host = inventory.get(ip_address)
+
+    if host is None:
+        raise InventoryError(
+            f"{ip_address} does not exist in the Cerberus inventory."
+        )
+
+    if hostname:
+        host.hostname = hostname
+
+    if mac_address:
+        host.mac_address = mac_address
+
+    if vendor:
+        host.vendor = vendor
+
+    host.device_type = device_type
+    host.operating_system = operating_system
+    host.tags = sorted(set(tags))
+    host.last_profiled = profiled_at
+
+    return save_inventory(inventory)

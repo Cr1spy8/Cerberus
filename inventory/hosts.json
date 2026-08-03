@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T18:12:02.128330-04:00",
+  "updated_at": "2026-08-03T19:09:19.158814-04:00",
   "host_count": 4,
   "hosts": [
     {
@@ -9,7 +9,15 @@
       "reason": "arp-response",
       "first_seen": "2026-08-03T18:04:32.880807-04:00",
       "last_seen": "2026-08-03T18:12:02.127769-04:00",
-      "sightings": 2
+      "sightings": 2,
+      "services": [],
+      "last_scanned": "",
+      "mac_address": "",
+      "vendor": "",
+      "device_type": "unknown",
+      "operating_system": "unknown",
+      "tags": [],
+      "last_profiled": ""
     },
     {
       "ip_address": "192.168.233.2",
@@ -18,7 +26,15 @@
       "reason": "arp-response",
       "first_seen": "2026-08-03T18:04:32.880807-04:00",
       "last_seen": "2026-08-03T18:12:02.127769-04:00",
-      "sightings": 2
+      "sightings": 2,
+      "services": [],
+      "last_scanned": "",
+      "mac_address": "",
+      "vendor": "",
+      "device_type": "unknown",
+      "operating_system": "unknown",
+      "tags": [],
+      "last_profiled": ""
     },
     {
       "ip_address": "192.168.233.135",
@@ -27,7 +43,15 @@
       "reason": "localhost-response",
       "first_seen": "2026-08-03T18:04:32.880807-04:00",
       "last_seen": "2026-08-03T18:12:02.127769-04:00",
-      "sightings": 2
+      "sightings": 2,
+      "services": [],
+      "last_scanned": "",
+      "mac_address": "",
+      "vendor": "",
+      "device_type": "unknown",
+      "operating_system": "unknown",
+      "tags": [],
+      "last_profiled": "2026-08-03T19:09:19.158332-04:00"
     },
     {
       "ip_address": "192.168.233.254",
@@ -36,7 +60,15 @@
       "reason": "arp-response",
       "first_seen": "2026-08-03T18:04:32.880807-04:00",
       "last_seen": "2026-08-03T18:12:02.127769-04:00",
-      "sightings": 2
+      "sightings": 2,
+      "services": [],
+      "last_scanned": "",
+      "mac_address": "",
+      "vendor": "",
+      "device_type": "unknown",
+      "operating_system": "unknown",
+      "tags": [],
+      "last_profiled": ""
     }
   ]
 }
