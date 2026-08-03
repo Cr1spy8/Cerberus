@@ -1,0 +1,42 @@
+{
+  "updated_at": "2026-08-03T18:12:02.128330-04:00",
+  "host_count": 4,
+  "hosts": [
+    {
+      "ip_address": "192.168.233.1",
+      "hostname": "",
+      "status": "up",
+      "reason": "arp-response",
+      "first_seen": "2026-08-03T18:04:32.880807-04:00",
+      "last_seen": "2026-08-03T18:12:02.127769-04:00",
+      "sightings": 2
+    },
+    {
+      "ip_address": "192.168.233.2",
+      "hostname": "",
+      "status": "up",
+      "reason": "arp-response",
+      "first_seen": "2026-08-03T18:04:32.880807-04:00",
+      "last_seen": "2026-08-03T18:12:02.127769-04:00",
+      "sightings": 2
+    },
+    {
+      "ip_address": "192.168.233.135",
+      "hostname": "",
+      "status": "up",
+      "reason": "localhost-response",
+      "first_seen": "2026-08-03T18:04:32.880807-04:00",
+      "last_seen": "2026-08-03T18:12:02.127769-04:00",
+      "sightings": 2
+    },
+    {
+      "ip_address": "192.168.233.254",
+      "hostname": "",
+      "status": "up",
+      "reason": "arp-response",
+      "first_seen": "2026-08-03T18:04:32.880807-04:00",
+      "last_seen": "2026-08-03T18:12:02.127769-04:00",
+      "sightings": 2
+    }
+  ]
+}

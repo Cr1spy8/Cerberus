@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from __future__ import annotations
-
+from cerberus.menu import run_menu
 import argparse
 import sys
 
@@ -9,6 +9,13 @@ from cerberus.modules.discovery import (
     DiscoveryError,
     discover_network,
     save_result,
+)
+
+from cerberus.modules.inventory import (
+    InventoryError,
+    load_inventory,
+    save_inventory,
+    update_inventory,
 )
 
 
@@ -40,10 +47,59 @@ def run_discovery() -> int:
             )
 
     output_path = save_result(result)
-    print(f"\n[+] Results saved to: {output_path}")
+
+    try:
+        inventory = update_inventory(result)
+        inventory_path = save_inventory(inventory)
+    except InventoryError as error:
+        print(f"\n[!] Inventory update failed: {error}")
+        return 1
+
+    print(f"\n[+] Scan saved to:      {output_path}")
+    print(f"[+] Inventory updated: {inventory_path}")
 
     return 0
 
+
+def show_inventory() -> int:
+    try:
+        inventory = load_inventory()
+    except InventoryError as error:
+        print(f"[!] Unable to load inventory: {error}")
+        return 1
+
+    print("=" * 78)
+    print("                         CERBERUS HOST INVENTORY")
+    print("=" * 78)
+
+    if not inventory:
+        print("[!] Inventory is empty. Run: cerberus discover")
+        return 0
+
+    print(
+        f"{'IP Address':<18}"
+        f"{'Status':<12}"
+        f"{'Seen':<8}"
+        f"{'Hostname':<24}"
+        f"Reason"
+    )
+    print("-" * 78)
+
+    for host in sorted(
+        inventory.values(),
+        key=lambda item: tuple(
+            int(part) for part in item.ip_address.split(".")
+        ),
+    ):
+        print(
+            f"{host.ip_address:<18}"
+            f"{host.status:<12}"
+            f"{host.sightings:<8}"
+            f"{host.hostname or '-':<24}"
+            f"{host.reason or '-'}"
+        )
+
+    return 0
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -57,6 +113,14 @@ def build_parser() -> argparse.ArgumentParser:
         "discover",
         help="Discover live hosts on the active IPv4 network",
     )
+    subparsers.add_parser(
+        "inventory",
+        help="Display the persistent Cerberus host inventory",
+    )
+    subparsers.add_parser(
+        "menu",
+        help="Launch the interactive Cerberus appliance interface",
+    )
 
     return parser
 
@@ -68,9 +132,15 @@ def main() -> int:
     if arguments.command == "discover":
         return run_discovery()
 
+    if arguments.command == "inventory":
+        return show_inventory()
+
+    if arguments.command == "menu" or arguments.command is None:
+        run_menu()
+        return 0
+
     parser.print_help()
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())
