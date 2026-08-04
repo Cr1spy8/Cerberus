@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 import os
+from cerberus import __version__
 from collections.abc import Callable
 from dataclasses import asdict
-
 from cerberus.modules.scanner import (
     ScannerError,
     save_port_scan,
@@ -44,13 +44,13 @@ def pause() -> None:
     """Wait for the operator before returning to the menu."""
     input("\nPress Enter to return to the main menu...")
 
-
 def print_banner() -> None:
+    """Display the Cerberus application banner."""
     print("=" * 62)
     print("                         CERBERUS")
     print("              Portable Penetration Testing Appliance")
+    print(f"                       Version {__version__}")
     print("=" * 62)
-
 
 def run_discovery_menu() -> None:
     """Run discovery and update the persistent inventory."""
@@ -513,20 +513,44 @@ def run_web_enumeration_menu() -> None:
 
     pause()
 
+def show_settings_menu() -> None:
+    """Display the initial Cerberus settings interface."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS SETTINGS\n")
+
+    print("General")
+    print("-" * 40)
+    print("Application Version:    " + __version__)
+    print("Configuration Backend:  Planned")
+    print("Update Channel:         Development")
+
+    print("\nScanning")
+    print("-" * 40)
+    print("Default Scan Profile:   Quick")
+    print("Automatic Interface:    Enabled")
+    print("Result Format:          JSON")
+
+    print("\nLogging")
+    print("-" * 40)
+    print("Local Result Storage:   Enabled")
+    print("Splunk Forwarding:      Not configured")
+
+    print("\n[*] Editable settings will be added before v1.0.")
+    pause()
+
 def show_planned_feature(feature_name: str) -> None:
-    """Display a placeholder for a planned Cerberus module."""
+    """Display a placeholder for an upcoming Cerberus module."""
     clear_screen()
     print_banner()
     print(f"\n{feature_name}\n")
-    print("[*] This module is planned but has not been implemented yet.")
+    print("[*] This module is not installed in the current build.")
     pause()
-
 
 def exit_cerberus() -> None:
     clear_screen()
     print_banner()
     print("\nCerberus shutting down.\n")
-
 
 def build_menu_actions() -> dict[str, Callable[[], None]]:
     """Map menu selections to Cerberus functions."""
@@ -536,14 +560,20 @@ def build_menu_actions() -> dict[str, Callable[[], None]]:
         "3": run_port_scanner_menu,
         "4": run_asset_profiler_menu,
         "5": run_web_enumeration_menu,
-        "6": lambda: show_planned_feature("SMB ENUMERATION"),
-        "7": lambda: show_planned_feature("DNS INTELLIGENCE"),
-	"8": lambda: show_planned_feature("REPORTS"),
-        "9": lambda: show_planned_feature("SPLUNK INTEGRATION"),
-	"10": lambda: show_planned_feature("HONEYPOT"),
-	"11": lambda: show_planned_feature("SETTINGS"),
+        "6": lambda: show_planned_feature(
+            "CERBERUS DEVICE INTELLIGENCE"
+        ),
+        "7": lambda: show_planned_feature(
+            "CERBERUS REPORTING ENGINE"
+        ),
+        "8": lambda: show_planned_feature(
+            "CERBERUS SPLUNK INTEGRATION"
+        ),
+        "9": lambda: show_planned_feature(
+            "CERBERUS HONEYPOT"
+        ),
+        "10": show_settings_menu,
     }
-
 
 def run_menu() -> None:
     """Launch the interactive Cerberus appliance interface."""
@@ -552,20 +582,33 @@ def run_menu() -> None:
     while True:
         clear_screen()
         print_banner()
-
         print(
             """
+--------- RECONNAISSANCE ---------
+
 [1] Discover Network
 [2] View Host Inventory
 [3] Port Scanner
 [4] Asset Profiler
 [5] Web Enumeration
-[6] SMB Enumeration          [Planned]
-[7] DNS Intelligence         [Planned]
-[8] Reports                  [Planned]
-[9] Splunk Integration       [Planned]
-[10] Honeypot		     [Planned]
-[11] Settings                [Planned]
+
+---------- INTELLIGENCE ----------
+
+[6] Device Intelligence       [Not Installed]
+
+----------- REPORTING ------------
+
+[7] Reports                   [Not Installed]
+
+--------- SOC INTEGRATION --------
+
+[8] Splunk Integration        [Not Installed]
+[9] Honeypot                  [Not Installed]
+
+------------ SYSTEM --------------
+
+[10] Settings
+
 [0] Exit
 """
         )

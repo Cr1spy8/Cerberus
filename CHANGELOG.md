@@ -136,3 +136,53 @@ Project initialized following a documentation-first approach. No hardware modifi
 - Added structured web-enumeration JSON storage.
 - Added web intelligence enrichment to the persistent inventory.
 - Integrated web enumeration into the Cerberus appliance menu.
+## Cerberus v1 Module Roadmap
+
+### Reconnaissance
+
+- [x] Module 001 — Network Discovery
+- [x] Module 002 — Persistent Host Inventory
+- [x] Module 003 — Port Scanner
+- [x] Module 004 — Asset Profiler
+- [x] Module 005 — Web Enumeration
+
+### Intelligence
+
+- [ ] Module 006 — Device Intelligence
+
+### Reporting
+
+- [ ] Module 007 — Reporting Engine
+
+### SOC Integration
+
+- [ ] Module 008 — Splunk Integration
+- [ ] Module 009 — Honeypot
+
+### System
+
+- [ ] Module 010 — Settings
+
+## v1 Deployment Milestone
+
+After all ten modules are complete, Cerberus will be packaged and deployed as a standalone appliance using:
+
+- The TP-Link Archer C54 as the isolated network backbone
+- A dedicated Linux system as the Cerberus processing platform
+- Automatic startup
+- Dependency installation
+- Configuration persistence
+- End-to-end acceptance testing
+
+## v0.5.1-dev — Interface and Roadmap Refresh
+
+### Changed
+
+- Added the application version to the Cerberus banner.
+- Reorganized the menu around reconnaissance, intelligence, reporting, SOC integration, and system functions.
+- Replaced the planned DNS Intelligence module with Device Intelligence.
+- Moved standalone SMB and DNS modules to the future roadmap.
+- Replaced planned-feature labels with `Not Installed`.
+- Established Settings as Module 010.
+- Added an initial read-only Settings interface.
+- Defined deployment as the milestone following completion of all ten v1 modules.

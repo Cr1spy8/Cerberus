@@ -286,3 +286,40 @@ The module collects:
 
 The module performs controlled reconnaissance and does not attempt exploitation.
 
+## Cerberus v1 Module Roadmap
+
+### Reconnaissance
+
+- [x] Module 001 — Network Discovery
+- [x] Module 002 — Persistent Host Inventory
+- [x] Module 003 — Port Scanner
+- [x] Module 004 — Asset Profiler
+- [x] Module 005 — Web Enumeration
+
+### Intelligence
+
+- [ ] Module 006 — Device Intelligence
+
+### Reporting
+
+- [ ] Module 007 — Reporting Engine
+
+### SOC Integration
+
+- [ ] Module 008 — Splunk Integration
+- [ ] Module 009 — Honeypot
+
+### System
+
+- [ ] Module 010 — Settings
+
+## v1 Deployment Milestone
+
+After all ten modules are complete, Cerberus will be packaged and deployed as a standalone appliance using:
+
+- The TP-Link Archer C54 as the isolated network backbone
+- A dedicated Linux system as the Cerberus processing platform
+- Automatic startup
+- Dependency installation
+- Configuration persistence
+- End-to-end acceptance testing
