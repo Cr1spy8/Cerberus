@@ -5,6 +5,7 @@ import os
 from cerberus import __version__
 from collections.abc import Callable
 from dataclasses import asdict
+
 from cerberus.modules.scanner import (
     ScannerError,
     save_port_scan,
@@ -19,6 +20,7 @@ from cerberus.modules.inventory import (
     InventoryError,
     load_inventory,
     save_inventory,
+    update_host_intelligence,
     update_host_profile,
     update_host_services,
     update_host_web_services,
@@ -34,11 +36,15 @@ from cerberus.modules.web_enum import (
     enumerate_host_web_services,
     save_web_enumeration,
 )
+from cerberus.modules.device_intel import (
+    DeviceIntelligenceError,
+    analyze_device,
+    save_device_intelligence,
+)
 
 def clear_screen() -> None:
     """Clear the terminal window."""
     os.system("clear")
-
 
 def pause() -> None:
     """Wait for the operator before returning to the menu."""
@@ -513,6 +519,125 @@ def run_web_enumeration_menu() -> None:
 
     pause()
 
+def run_device_intelligence_menu() -> None:
+    """Analyze an inventory host using collected Cerberus evidence."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS DEVICE INTELLIGENCE\n")
+
+    try:
+        inventory = load_inventory()
+    except InventoryError as error:
+        print(f"[!] Unable to load inventory: {error}")
+        pause()
+        return
+
+    if not inventory:
+        print("[!] Inventory is empty.")
+        print("    Run Network Discovery first.")
+        pause()
+        return
+
+    hosts = sorted(
+        inventory.values(),
+        key=lambda item: tuple(
+            int(part)
+            for part in item.ip_address.split(".")
+        ),
+    )
+
+    for number, host in enumerate(hosts, start=1):
+        print(
+            f"[{number}] {host.ip_address:<18} "
+            f"{host.hostname or 'Unknown':<24} "
+            f"Services: {len(host.services)}"
+        )
+
+    print("[0] Cancel")
+
+    selection = input("\nSelect an asset: ").strip()
+
+    if selection == "0":
+        return
+
+    try:
+        selected_host = hosts[int(selection) - 1]
+    except (ValueError, IndexError):
+        print("\n[!] Invalid asset selection.")
+        pause()
+        return
+
+    print(
+        f"\n[*] Analyzing {selected_host.ip_address}...\n"
+    )
+
+    try:
+        result = analyze_device(selected_host)
+        result_path = save_device_intelligence(result)
+
+        intelligence_record = asdict(result)
+
+        inventory_path = update_host_intelligence(
+            ip_address=result.ip_address,
+            intelligence=intelligence_record,
+            analyzed_at=result.timestamp,
+        )
+
+    except (
+        DeviceIntelligenceError,
+        InventoryError,
+    ) as error:
+        print(f"[!] Device Intelligence failed: {error}")
+        pause()
+        return
+
+    print(f"{'IP Address:':<22}{result.ip_address}")
+    print(f"{'Classification:':<22}{result.classification}")
+    print(f"{'Operating System:':<22}{result.operating_system}")
+    print(f"{'Vendor:':<22}{result.vendor or 'Unknown'}")
+    print(
+        f"{'Confidence:':<22}"
+        f"{result.confidence_score}%"
+    )
+    print(
+        f"{'Risk:':<22}"
+        f"{result.risk_level.upper()} "
+        f"({result.risk_score}/100)"
+    )
+
+    print("\nEvidence:")
+
+    if result.evidence:
+        for evidence in result.evidence:
+            print(f"  - {evidence}")
+    else:
+        print("  - Insufficient evidence collected.")
+
+    print("\nFindings:")
+
+    if result.findings:
+        for finding in result.findings:
+            print(
+                f"  [{finding.severity.upper()}] "
+                f"{finding.title}"
+            )
+            print(f"      {finding.evidence}")
+    else:
+        print("  - No specific findings generated.")
+
+    print("\nRecommendations:")
+
+    if result.recommendations:
+        for recommendation in result.recommendations:
+            print(f"  - {recommendation}")
+    else:
+        print("  - No recommendations generated.")
+
+    print(f"\n[+] Results saved to:  {result_path}")
+    print(f"[+] Inventory updated: {inventory_path}")
+
+    pause()
+
 def show_settings_menu() -> None:
     """Display the initial Cerberus settings interface."""
     clear_screen()
@@ -560,9 +685,7 @@ def build_menu_actions() -> dict[str, Callable[[], None]]:
         "3": run_port_scanner_menu,
         "4": run_asset_profiler_menu,
         "5": run_web_enumeration_menu,
-        "6": lambda: show_planned_feature(
-            "CERBERUS DEVICE INTELLIGENCE"
-        ),
+        "6": run_device_intelligence_menu,
         "7": lambda: show_planned_feature(
             "CERBERUS REPORTING ENGINE"
         ),
@@ -594,7 +717,7 @@ def run_menu() -> None:
 
 ---------- INTELLIGENCE ----------
 
-[6] Device Intelligence       [Not Installed]
+[6] Device Intelligence
 
 ----------- REPORTING ------------
 

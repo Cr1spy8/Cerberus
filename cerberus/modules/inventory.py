@@ -38,7 +38,8 @@ class InventoryHost:
     last_profiled: str = ""
     web_services: list[dict[str, object]] = field(default_factory=list)
     last_web_scan: str = ""
-
+    intelligence: dict[str, object] = field(default_factory=dict)
+    last_intelligence_scan: str = ""
 
 def load_inventory() -> dict[str, InventoryHost]:
     """Load the host inventory, indexed by IP address."""
@@ -65,6 +66,8 @@ def load_inventory() -> dict[str, InventoryHost]:
         item.setdefault("operating_system", "unknown")
         item.setdefault("tags", [])
         item.setdefault("last_profiled", "")
+        item.setdefault("intelligence", {})
+        item.setdefault("last_intelligence_scan", "")
 
         host = InventoryHost(**item)
         hosts[host.ip_address] = host
@@ -202,6 +205,38 @@ def update_host_profile(
     host.last_profiled = profiled_at
 
     return save_inventory(inventory)
+
+def update_host_intelligence(
+    ip_address: str,
+    intelligence: dict[str, object],
+    analyzed_at: str,
+) -> Path:
+    """Store Device Intelligence results for an inventory host."""
+    inventory = load_inventory()
+    host = inventory.get(ip_address)
+
+    if host is None:
+        raise InventoryError(
+            f"{ip_address} does not exist in the Cerberus inventory."
+        )
+
+    host.intelligence = intelligence
+    host.last_intelligence_scan = analyzed_at
+
+    new_tags = intelligence.get("tags", [])
+
+    if isinstance(new_tags, list):
+        host.tags = sorted(
+            set(host.tags)
+            | {
+                str(tag)
+                for tag in new_tags
+                if str(tag).strip()
+            }
+        )
+
+    return save_inventory(inventory)
+
 def update_host_web_services(
     ip_address: str,
     web_services: list[dict[str, object]],

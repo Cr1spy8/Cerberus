@@ -323,3 +323,20 @@ After all ten modules are complete, Cerberus will be packaged and deployed as a 
 - Dependency installation
 - Configuration persistence
 - End-to-end acceptance testing
+
+## Device Intelligence
+
+Cerberus combines discovery, service, profile, and web-enumeration evidence to produce an evidence-based device assessment.
+
+The module provides:
+
+- Broad device classification
+- Operating-system family inference
+- Product and vendor clues
+- Confidence scoring
+- Exposure-based risk scoring
+- Findings and recommendations
+- Structured JSON storage
+- Persistent inventory enrichment
+
+Conclusions are treated as estimates and include supporting evidence. Cerberus prefers an unknown classification over unsupported certainty.
