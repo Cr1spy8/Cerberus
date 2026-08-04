@@ -268,3 +268,21 @@ The profiler can record:
 - Evidence supporting each classification
 
 Profile conclusions are treated as estimates unless confirmed by stronger scan evidence.
+
+## Web Enumeration
+
+Cerberus can enumerate HTTP and HTTPS services identified during port scanning.
+
+The module collects:
+
+- HTTP status and redirect destinations
+- Page titles
+- Server and content-type headers
+- Common security-header presence
+- robots.txt information
+- Basic TLS connection and certificate metadata
+- Structured JSON results
+- Persistent inventory enrichment
+
+The module performs controlled reconnaissance and does not attempt exploitation.
+

@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 from __future__ import annotations
-
 import os
 from collections.abc import Callable
-
 from dataclasses import asdict
 
 from cerberus.modules.scanner import (
@@ -12,26 +10,29 @@ from cerberus.modules.scanner import (
     save_port_scan,
     scan_host,
 )
-
 from cerberus.modules.discovery import (
     DiscoveryError,
     discover_network,
     save_result,
 )
-
 from cerberus.modules.inventory import (
     InventoryError,
     load_inventory,
     save_inventory,
     update_host_profile,
     update_host_services,
+    update_host_web_services,
     update_inventory,
 )
-
 from cerberus.modules.profiler import (
     ProfilerError,
     profile_host,
     save_profile,
+)
+from cerberus.modules.web_enum import (
+    WebEnumerationError,
+    enumerate_host_web_services,
+    save_web_enumeration,
 )
 
 def clear_screen() -> None:
@@ -347,6 +348,171 @@ def run_asset_profiler_menu() -> None:
 
     pause()
 
+def run_web_enumeration_menu() -> None:
+    """Select an inventory host and enumerate known web services."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS WEB ENUMERATION\n")
+
+    try:
+        inventory = load_inventory()
+    except InventoryError as error:
+        print(f"[!] Unable to load inventory: {error}")
+        pause()
+        return
+
+    eligible_hosts = [
+        host
+        for host in inventory.values()
+        if any(
+            "http" in str(service.get("service", "")).lower()
+            or int(service.get("port", 0)) in {
+                80,
+                443,
+                8000,
+                8080,
+                8443,
+            }
+            for service in host.services
+        )
+    ]
+
+    eligible_hosts.sort(
+        key=lambda item: tuple(
+            int(part)
+            for part in item.ip_address.split(".")
+        )
+    )
+
+    if not eligible_hosts:
+        print("[!] No inventoried hosts have known web services.")
+        print("    Run the Port Scanner against a web-enabled target first.")
+        pause()
+        return
+
+    for number, host in enumerate(
+        eligible_hosts,
+        start=1,
+    ):
+        web_ports = [
+            str(service.get("port"))
+            for service in host.services
+            if (
+                "http"
+                in str(service.get("service", "")).lower()
+                or int(service.get("port", 0))
+                in {80, 443, 8000, 8080, 8443}
+            )
+        ]
+
+        print(
+            f"[{number}] {host.ip_address:<18} "
+            f"Ports: {', '.join(web_ports)}"
+        )
+
+    print("[0] Cancel")
+    selection = input("\nSelect a web target: ").strip()
+
+    if selection == "0":
+        return
+
+    try:
+        selected_host = eligible_hosts[int(selection) - 1]
+    except (ValueError, IndexError):
+        print("\n[!] Invalid target selection.")
+        pause()
+        return
+
+    print(
+        f"\n[*] Enumerating web services on "
+        f"{selected_host.ip_address}...\n"
+    )
+
+    try:
+        result = enumerate_host_web_services(
+            selected_host.ip_address,
+            selected_host.services,
+        )
+
+        scan_path = save_web_enumeration(result)
+
+        web_records = [
+            asdict(service)
+            for service in result.services
+        ]
+
+        inventory_path = update_host_web_services(
+            ip_address=result.target,
+            web_services=web_records,
+            scanned_at=result.timestamp,
+        )
+
+    except (
+        WebEnumerationError,
+        InventoryError,
+    ) as error:
+        print(f"[!] Web enumeration failed: {error}")
+        pause()
+        return
+
+    for service in result.services:
+        print("-" * 70)
+        print(f"URL:          {service.requested_url}")
+
+        if service.error:
+            print(f"Error:        {service.error}")
+            continue
+
+        print(f"Final URL:    {service.final_url}")
+        print(
+            f"Status:       "
+            f"{service.status_code} {service.reason}"
+        )
+        print(f"Title:        {service.title or 'Unknown'}")
+        print(f"Server:       {service.server or 'Not disclosed'}")
+        print(
+            f"Content-Type: "
+            f"{service.content_type or 'Unknown'}"
+        )
+
+        if service.present_security_headers:
+            print(
+                "Present Headers: "
+                + ", ".join(
+                    service.present_security_headers
+                )
+            )
+
+        if service.missing_security_headers:
+            print(
+                "Missing Headers: "
+                + ", ".join(
+                    service.missing_security_headers
+                )
+            )
+
+        if service.robots_status is not None:
+            print(
+                f"robots.txt:   HTTP "
+                f"{service.robots_status}"
+            )
+
+        if service.tls is not None:
+            print(
+                f"TLS:          "
+                f"{service.tls.protocol or 'Unknown'}"
+            )
+            print(
+                f"Certificate:  "
+                f"{service.tls.subject or 'Unavailable'}"
+            )
+
+    print(f"\n[+] Web services:      {result.service_count}")
+    print(f"[+] Results saved to:  {scan_path}")
+    print(f"[+] Inventory updated: {inventory_path}")
+
+    pause()
+
 def show_planned_feature(feature_name: str) -> None:
     """Display a placeholder for a planned Cerberus module."""
     clear_screen()
@@ -369,10 +535,13 @@ def build_menu_actions() -> dict[str, Callable[[], None]]:
         "2": show_inventory_menu,
         "3": run_port_scanner_menu,
         "4": run_asset_profiler_menu,
-        "5": lambda: show_planned_feature("WEB ENUMERATION"),
+        "5": run_web_enumeration_menu,
         "6": lambda: show_planned_feature("SMB ENUMERATION"),
-        "7": lambda: show_planned_feature("REPORTS"),
-        "8": lambda: show_planned_feature("SETTINGS"),
+        "7": lambda: show_planned_feature("DNS INTELLIGENCE"),
+	"8": lambda: show_planned_feature("REPORTS"),
+        "9": lambda: show_planned_feature("SPLUNK INTEGRATION"),
+	"10": lambda: show_planned_feature("HONEYPOT"),
+	"11": lambda: show_planned_feature("SETTINGS"),
     }
 
 
@@ -390,10 +559,13 @@ def run_menu() -> None:
 [2] View Host Inventory
 [3] Port Scanner
 [4] Asset Profiler
-[5] Web Enumeration          [Planned]
+[5] Web Enumeration
 [6] SMB Enumeration          [Planned]
-[7] Reports                  [Planned]
-[8] Settings                 [Planned]
+[7] DNS Intelligence         [Planned]
+[8] Reports                  [Planned]
+[9] Splunk Integration       [Planned]
+[10] Honeypot		     [Planned]
+[11] Settings                [Planned]
 [0] Exit
 """
         )

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T19:09:19.158814-04:00",
+  "updated_at": "2026-08-04T14:43:45.666752-04:00",
   "host_count": 4,
   "hosts": [
     {
@@ -17,7 +17,9 @@
       "device_type": "unknown",
       "operating_system": "unknown",
       "tags": [],
-      "last_profiled": ""
+      "last_profiled": "",
+      "web_services": [],
+      "last_web_scan": ""
     },
     {
       "ip_address": "192.168.233.2",
@@ -34,7 +36,9 @@
       "device_type": "unknown",
       "operating_system": "unknown",
       "tags": [],
-      "last_profiled": ""
+      "last_profiled": "",
+      "web_services": [],
+      "last_web_scan": ""
     },
     {
       "ip_address": "192.168.233.135",
@@ -44,14 +48,61 @@
       "first_seen": "2026-08-03T18:04:32.880807-04:00",
       "last_seen": "2026-08-03T18:12:02.127769-04:00",
       "sightings": 2,
-      "services": [],
-      "last_scanned": "",
+      "services": [
+        {
+          "port": 8080,
+          "protocol": "tcp",
+          "state": "open",
+          "service": "http",
+          "product": "SimpleHTTPServer",
+          "version": "0.6",
+          "extra_info": "Python 3.13.14"
+        }
+      ],
+      "last_scanned": "2026-08-04T14:35:42.872016-04:00",
       "mac_address": "",
       "vendor": "",
       "device_type": "unknown",
       "operating_system": "unknown",
-      "tags": [],
-      "last_profiled": "2026-08-03T19:09:19.158332-04:00"
+      "tags": [
+        "web:http"
+      ],
+      "last_profiled": "2026-08-03T19:09:19.158332-04:00",
+      "web_services": [
+        {
+          "scheme": "http",
+          "port": 8080,
+          "requested_url": "http://192.168.233.135:8080/",
+          "final_url": "http://192.168.233.135:8080/",
+          "status_code": 200,
+          "reason": "OK",
+          "title": "Cerberus Test Server",
+          "server": "SimpleHTTP/0.6 Python/3.13.14",
+          "content_type": "text/html",
+          "content_length": "94",
+          "headers": {
+            "server": "SimpleHTTP/0.6 Python/3.13.14",
+            "date": "Tue, 04 Aug 2026 18:43:45 GMT",
+            "content-type": "text/html",
+            "content-length": "94",
+            "last-modified": "Tue, 04 Aug 2026 01:03:37 GMT"
+          },
+          "present_security_headers": [],
+          "missing_security_headers": [
+            "Content-Security-Policy",
+            "Permissions-Policy",
+            "Referrer-Policy",
+            "Strict-Transport-Security",
+            "X-Content-Type-Options",
+            "X-Frame-Options"
+          ],
+          "robots_status": 404,
+          "robots_preview": "<!DOCTYPE HTML>\n<html lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\">\n        <title>Error response</title>\n    </head>\n    <body>\n        <h1>Error response</h1>\n        <p>Error code: 404</p>\n        <p>Message: File not found.</p>\n        <p>Error code explanation: 404 - Nothing matches the given URI.</p>\n    </body>\n</html>",
+          "tls": null,
+          "error": ""
+        }
+      ],
+      "last_web_scan": "2026-08-04T14:43:45.665978-04:00"
     },
     {
       "ip_address": "192.168.233.254",
@@ -68,7 +119,9 @@
       "device_type": "unknown",
       "operating_system": "unknown",
       "tags": [],
-      "last_profiled": ""
+      "last_profiled": "",
+      "web_services": [],
+      "last_web_scan": ""
     }
   ]
 }

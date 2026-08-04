@@ -36,6 +36,8 @@ class InventoryHost:
     operating_system: str = "unknown"
     tags: list[str] = field(default_factory=list)
     last_profiled: str = ""
+    web_services: list[dict[str, object]] = field(default_factory=list)
+    last_web_scan: str = ""
 
 
 def load_inventory() -> dict[str, InventoryHost]:
@@ -160,10 +162,11 @@ def update_host_services(
             f"{ip_address} does not exist in the Cerberus inventory."
         )
 
-        host.services = services
-        host.last_scanned = scanned_at
+    host.services = services
+    host.last_scanned = scanned_at
 
     return save_inventory(inventory)
+
 def update_host_profile(
     ip_address: str,
     *,
@@ -197,5 +200,30 @@ def update_host_profile(
     host.operating_system = operating_system
     host.tags = sorted(set(tags))
     host.last_profiled = profiled_at
+
+    return save_inventory(inventory)
+def update_host_web_services(
+    ip_address: str,
+    web_services: list[dict[str, object]],
+    scanned_at: str,
+) -> Path:
+    """Store web-enumeration results for an inventory host."""
+    inventory = load_inventory()
+    host = inventory.get(ip_address)
+
+    if host is None:
+        raise InventoryError(
+            f"{ip_address} does not exist in the Cerberus inventory."
+        )
+
+    host.web_services = web_services
+    host.last_web_scan = scanned_at
+
+    web_tags = {
+        f"web:{service.get('scheme', 'http')}"
+        for service in web_services
+    }
+
+    host.tags = sorted(set(host.tags) | web_tags)
 
     return save_inventory(inventory)

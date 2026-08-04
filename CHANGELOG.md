@@ -120,3 +120,19 @@ Project initialized following a documentation-first approach. No hardware modifi
 - Integrated the profiler into the Cerberus appliance menu.
 
 
+## v2.8 — Web Enumeration
+
+### Added
+
+- Added Module 005: Web Enumeration.
+- Added inventory-based web-target selection.
+- Added HTTP and HTTPS response collection.
+- Added redirect tracking.
+- Added HTML page-title extraction.
+- Added server and content-type identification.
+- Added common HTTP security-header analysis.
+- Added robots.txt collection.
+- Added basic TLS protocol and certificate metadata.
+- Added structured web-enumeration JSON storage.
+- Added web intelligence enrichment to the persistent inventory.
+- Integrated web enumeration into the Cerberus appliance menu.
