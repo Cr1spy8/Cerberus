@@ -1,0 +1,243 @@
+{
+  "summary": {
+    "generated_at": "2026-08-05T01:39:07.231800-04:00",
+    "cerberus_version": "0.7.1-dev",
+    "report_type": "full_network",
+    "network_name": "192.168.233.135",
+    "total_hosts": 4,
+    "active_hosts": 4,
+    "hosts_with_services": 1,
+    "hosts_with_web_services": 1,
+    "total_open_services": 1,
+    "risk_counts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 1,
+      "informational": 3
+    }
+  },
+  "hosts": [
+    {
+      "ip_address": "192.168.233.1",
+      "hostname": "",
+      "status": "up",
+      "reason": "arp-response",
+      "first_seen": "2026-08-03T18:04:32.880807-04:00",
+      "last_seen": "2026-08-04T15:05:55.200895-04:00",
+      "sightings": 3,
+      "services": [],
+      "last_scanned": "",
+      "mac_address": "",
+      "vendor": "",
+      "device_type": "unknown",
+      "operating_system": "unknown",
+      "tags": [],
+      "last_profiled": "",
+      "web_services": [],
+      "last_web_scan": "",
+      "intelligence": {},
+      "last_intelligence_scan": "",
+      "report_classification": "unknown",
+      "report_operating_system": "unknown",
+      "risk_score": 0,
+      "risk_level": "informational",
+      "confidence_score": 0,
+      "findings": [],
+      "recommendations": []
+    },
+    {
+      "ip_address": "192.168.233.2",
+      "hostname": "",
+      "status": "up",
+      "reason": "arp-response",
+      "first_seen": "2026-08-03T18:04:32.880807-04:00",
+      "last_seen": "2026-08-04T15:05:55.200895-04:00",
+      "sightings": 3,
+      "services": [],
+      "last_scanned": "",
+      "mac_address": "",
+      "vendor": "",
+      "device_type": "unknown",
+      "operating_system": "unknown",
+      "tags": [],
+      "last_profiled": "",
+      "web_services": [],
+      "last_web_scan": "",
+      "intelligence": {},
+      "last_intelligence_scan": "",
+      "report_classification": "unknown",
+      "report_operating_system": "unknown",
+      "risk_score": 0,
+      "risk_level": "informational",
+      "confidence_score": 0,
+      "findings": [],
+      "recommendations": []
+    },
+    {
+      "ip_address": "192.168.233.135",
+      "hostname": "",
+      "status": "up",
+      "reason": "localhost-response",
+      "first_seen": "2026-08-03T18:04:32.880807-04:00",
+      "last_seen": "2026-08-04T15:05:55.200895-04:00",
+      "sightings": 3,
+      "services": [
+        {
+          "port": 8080,
+          "protocol": "tcp",
+          "state": "open",
+          "service": "http",
+          "product": "SimpleHTTPServer",
+          "version": "0.6",
+          "extra_info": "Python 3.13.14"
+        }
+      ],
+      "last_scanned": "2026-08-04T14:35:42.872016-04:00",
+      "mac_address": "",
+      "vendor": "",
+      "device_type": "unknown",
+      "operating_system": "unknown",
+      "tags": [
+        "class:web_enabled_host",
+        "os:unknown",
+        "risk:low",
+        "web:http"
+      ],
+      "last_profiled": "2026-08-03T19:09:19.158332-04:00",
+      "web_services": [
+        {
+          "scheme": "http",
+          "port": 8080,
+          "requested_url": "http://192.168.233.135:8080/",
+          "final_url": "http://192.168.233.135:8080/",
+          "status_code": 200,
+          "reason": "OK",
+          "title": "Cerberus Test Server",
+          "server": "SimpleHTTP/0.6 Python/3.13.14",
+          "content_type": "text/html",
+          "content_length": "94",
+          "headers": {
+            "server": "SimpleHTTP/0.6 Python/3.13.14",
+            "date": "Tue, 04 Aug 2026 18:43:45 GMT",
+            "content-type": "text/html",
+            "content-length": "94",
+            "last-modified": "Tue, 04 Aug 2026 01:03:37 GMT"
+          },
+          "present_security_headers": [],
+          "missing_security_headers": [
+            "Content-Security-Policy",
+            "Permissions-Policy",
+            "Referrer-Policy",
+            "Strict-Transport-Security",
+            "X-Content-Type-Options",
+            "X-Frame-Options"
+          ],
+          "robots_status": 404,
+          "robots_preview": "<!DOCTYPE HTML>\n<html lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\">\n        <title>Error response</title>\n    </head>\n    <body>\n        <h1>Error response</h1>\n        <p>Error code: 404</p>\n        <p>Message: File not found.</p>\n        <p>Error code explanation: 404 - Nothing matches the given URI.</p>\n    </body>\n</html>",
+          "tls": null,
+          "error": ""
+        }
+      ],
+      "last_web_scan": "2026-08-04T14:43:45.665978-04:00",
+      "intelligence": {
+        "timestamp": "2026-08-04T16:32:15.469378-04:00",
+        "ip_address": "192.168.233.135",
+        "classification": "web_enabled_host",
+        "operating_system": "unknown",
+        "vendor": "",
+        "product_clues": [
+          "SimpleHTTPServer 0.6 Python 3.13.14",
+          "Web endpoint: http://192.168.233.135:8080/",
+          "Web server: SimpleHTTP/0.6 Python/3.13.14",
+          "Web title: Cerberus Test Server"
+        ],
+        "confidence_score": 35,
+        "risk_score": 15,
+        "risk_level": "low",
+        "tags": [
+          "class:web_enabled_host",
+          "os:unknown",
+          "risk:low"
+        ],
+        "evidence": [
+          "One or more web services were observed.",
+          "SimpleHTTPServer 0.6 Python 3.13.14",
+          "Web endpoint: http://192.168.233.135:8080/",
+          "Web server: SimpleHTTP/0.6 Python/3.13.14",
+          "Web title: Cerberus Test Server"
+        ],
+        "findings": [
+          {
+            "severity": "low",
+            "title": "Web security headers missing",
+            "evidence": "Missing headers: Content-Security-Policy, Permissions-Policy, Referrer-Policy, Strict-Transport-Security, X-Content-Type-Options, X-Frame-Options",
+            "recommendation": "Review whether appropriate browser security headers can be enabled."
+          },
+          {
+            "severity": "informational",
+            "title": "Web server banner disclosed",
+            "evidence": "Server header: SimpleHTTP/0.6 Python/3.13.14",
+            "recommendation": "Consider reducing unnecessary version disclosure."
+          }
+        ],
+        "recommendations": [
+          "Consider reducing unnecessary version disclosure.",
+          "Review whether appropriate browser security headers can be enabled."
+        ]
+      },
+      "last_intelligence_scan": "2026-08-04T16:32:15.469378-04:00",
+      "report_classification": "web_enabled_host",
+      "report_operating_system": "unknown",
+      "risk_score": 15,
+      "risk_level": "low",
+      "confidence_score": 35,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Web security headers missing",
+          "evidence": "Missing headers: Content-Security-Policy, Permissions-Policy, Referrer-Policy, Strict-Transport-Security, X-Content-Type-Options, X-Frame-Options",
+          "recommendation": "Review whether appropriate browser security headers can be enabled."
+        },
+        {
+          "severity": "informational",
+          "title": "Web server banner disclosed",
+          "evidence": "Server header: SimpleHTTP/0.6 Python/3.13.14",
+          "recommendation": "Consider reducing unnecessary version disclosure."
+        }
+      ],
+      "recommendations": [
+        "Consider reducing unnecessary version disclosure.",
+        "Review whether appropriate browser security headers can be enabled."
+      ]
+    },
+    {
+      "ip_address": "192.168.233.254",
+      "hostname": "",
+      "status": "up",
+      "reason": "arp-response",
+      "first_seen": "2026-08-03T18:04:32.880807-04:00",
+      "last_seen": "2026-08-04T15:05:55.200895-04:00",
+      "sightings": 3,
+      "services": [],
+      "last_scanned": "",
+      "mac_address": "",
+      "vendor": "",
+      "device_type": "unknown",
+      "operating_system": "unknown",
+      "tags": [],
+      "last_profiled": "",
+      "web_services": [],
+      "last_web_scan": "",
+      "intelligence": {},
+      "last_intelligence_scan": "",
+      "report_classification": "unknown",
+      "report_operating_system": "unknown",
+      "risk_score": 0,
+      "risk_level": "informational",
+      "confidence_score": 0,
+      "findings": [],
+      "recommendations": []
+    }
+  ]
+}

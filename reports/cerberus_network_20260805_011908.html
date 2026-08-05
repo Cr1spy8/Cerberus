@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cerberus Assessment Report</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px;
+    line-height: 1.5;
+    background: #f4f4f4;
+    color: #1c1c1c;
+}
+header, section {
+    background: white;
+    padding: 24px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+h1, h2, h3 {
+    margin-top: 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #cccccc;
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background: #eeeeee;
+}
+.risk-critical, .risk-high {
+    font-weight: bold;
+}
+.finding {
+    padding: 12px;
+    margin: 10px 0;
+    background: #f7f7f7;
+    border-left: 4px solid #777777;
+}
+code {
+    background: #eeeeee;
+    padding: 2px 5px;
+}
+footer {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 30px;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Cerberus Assessment Report</h1>
+<p><strong>Generated:</strong> 2026-08-05T01:19:08.819550-04:00</p>
+<p><strong>Version:</strong> 0.7.0-dev</p>
+<p><strong>Network:</strong> 192.168.233.135</p>
+</header>
+
+<section>
+<h2>Executive Summary</h2>
+<ul>
+<li>Total hosts: 4</li>
+<li>Active hosts: 4</li>
+<li>Hosts with services: 1</li>
+<li>Hosts with web services: 1</li>
+<li>Total open services: 1</li>
+</ul>
+</section>
+
+<section>
+<h2>Risk Distribution</h2>
+<table>
+<tr>
+<th>Critical</th>
+<th>High</th>
+<th>Medium</th>
+<th>Low</th>
+<th>Informational</th>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>3</td>
+</tr>
+</table>
+</section>
+
+
+<section>
+<h2>192.168.233.1</h2>
+
+<h3>Identity</h3>
+<table>
+<tr><th>Hostname</th><td>Unknown</td></tr>
+<tr><th>MAC Address</th><td>Unavailable</td></tr>
+<tr><th>Vendor</th><td>Unknown</td></tr>
+<tr><th>Classification</th><td>unknown</td></tr>
+<tr><th>Operating System</th><td>unknown</td></tr>
+<tr><th>Confidence</th><td>0%</td></tr>
+<tr><th>Risk</th><td class="risk-informational">INFORMATIONAL (0/100)</td></tr>
+</table>
+
+<h3>Open Services</h3>
+<ul>
+<li>No open services stored.</li>
+</ul>
+
+<h3>Web Services</h3>
+<ul>
+<li>No web services stored.</li>
+</ul>
+
+<h3>Findings</h3>
+<p>No Device Intelligence findings stored.</p>
+
+<h3>Recommendations</h3>
+<ul>
+<li>No recommendations stored.</li>
+</ul>
+</section>
+
+
+<section>
+<h2>192.168.233.2</h2>
+
+<h3>Identity</h3>
+<table>
+<tr><th>Hostname</th><td>Unknown</td></tr>
+<tr><th>MAC Address</th><td>Unavailable</td></tr>
+<tr><th>Vendor</th><td>Unknown</td></tr>
+<tr><th>Classification</th><td>unknown</td></tr>
+<tr><th>Operating System</th><td>unknown</td></tr>
+<tr><th>Confidence</th><td>0%</td></tr>
+<tr><th>Risk</th><td class="risk-informational">INFORMATIONAL (0/100)</td></tr>
+</table>
+
+<h3>Open Services</h3>
+<ul>
+<li>No open services stored.</li>
+</ul>
+
+<h3>Web Services</h3>
+<ul>
+<li>No web services stored.</li>
+</ul>
+
+<h3>Findings</h3>
+<p>No Device Intelligence findings stored.</p>
+
+<h3>Recommendations</h3>
+<ul>
+<li>No recommendations stored.</li>
+</ul>
+</section>
+
+
+<section>
+<h2>192.168.233.135</h2>
+
+<h3>Identity</h3>
+<table>
+<tr><th>Hostname</th><td>Unknown</td></tr>
+<tr><th>MAC Address</th><td>Unavailable</td></tr>
+<tr><th>Vendor</th><td>Unknown</td></tr>
+<tr><th>Classification</th><td>web_enabled_host</td></tr>
+<tr><th>Operating System</th><td>unknown</td></tr>
+<tr><th>Confidence</th><td>35%</td></tr>
+<tr><th>Risk</th><td class="risk-low">LOW (15/100)</td></tr>
+</table>
+
+<h3>Open Services</h3>
+<ul>
+<li>8080/tcp — http — SimpleHTTPServer 0.6 Python 3.13.14</li>
+</ul>
+
+<h3>Web Services</h3>
+<ul>
+<li><strong>http://192.168.233.135:8080/</strong><br>Status: 200 OK<br>Title: Cerberus Test Server<br>Server: SimpleHTTP/0.6 Python/3.13.14<br>Missing headers: Content-Security-Policy, Permissions-Policy, Referrer-Policy, Strict-Transport-Security, X-Content-Type-Options, X-Frame-Options</li>
+</ul>
+
+<h3>Findings</h3>
+<div class="finding"><strong>LOW: Web security headers missing</strong><p>Missing headers: Content-Security-Policy, Permissions-Policy, Referrer-Policy, Strict-Transport-Security, X-Content-Type-Options, X-Frame-Options</p><p><strong>Recommendation:</strong> Review whether appropriate browser security headers can be enabled.</p></div>
+<div class="finding"><strong>INFORMATIONAL: Web server banner disclosed</strong><p>Server header: SimpleHTTP/0.6 Python/3.13.14</p><p><strong>Recommendation:</strong> Consider reducing unnecessary version disclosure.</p></div>
+
+<h3>Recommendations</h3>
+<ul>
+<li>Consider reducing unnecessary version disclosure.</li>
+<li>Review whether appropriate browser security headers can be enabled.</li>
+</ul>
+</section>
+
+
+<section>
+<h2>192.168.233.254</h2>
+
+<h3>Identity</h3>
+<table>
+<tr><th>Hostname</th><td>Unknown</td></tr>
+<tr><th>MAC Address</th><td>Unavailable</td></tr>
+<tr><th>Vendor</th><td>Unknown</td></tr>
+<tr><th>Classification</th><td>unknown</td></tr>
+<tr><th>Operating System</th><td>unknown</td></tr>
+<tr><th>Confidence</th><td>0%</td></tr>
+<tr><th>Risk</th><td class="risk-informational">INFORMATIONAL (0/100)</td></tr>
+</table>
+
+<h3>Open Services</h3>
+<ul>
+<li>No open services stored.</li>
+</ul>
+
+<h3>Web Services</h3>
+<ul>
+<li>No web services stored.</li>
+</ul>
+
+<h3>Findings</h3>
+<p>No Device Intelligence findings stored.</p>
+
+<h3>Recommendations</h3>
+<ul>
+<li>No recommendations stored.</li>
+</ul>
+</section>
+
+
+<footer>
+Generated by Cerberus 0.7.0-dev
+</footer>
+
+</body>
+</html>

@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 import os
-from cerberus import __version__
 from collections.abc import Callable
 from dataclasses import asdict
+from cerberus.branding import terminal_banner
 
 from cerberus.modules.scanner import (
     ScannerError,
@@ -41,6 +41,13 @@ from cerberus.modules.device_intel import (
     analyze_device,
     save_device_intelligence,
 )
+from cerberus.modules.reporting import (
+    ReportingError,
+    build_host_report,
+    build_network_report,
+    list_existing_reports,
+    save_all_formats,
+)
 
 def clear_screen() -> None:
     """Clear the terminal window."""
@@ -52,11 +59,7 @@ def pause() -> None:
 
 def print_banner() -> None:
     """Display the Cerberus application banner."""
-    print("=" * 62)
-    print("                         CERBERUS")
-    print("              Portable Penetration Testing Appliance")
-    print(f"                       Version {__version__}")
-    print("=" * 62)
+    print(terminal_banner())
 
 def run_discovery_menu() -> None:
     """Run discovery and update the persistent inventory."""
@@ -638,6 +641,196 @@ def run_device_intelligence_menu() -> None:
 
     pause()
 
+def generate_network_report_menu() -> None:
+    """Generate full-network reports in all supported formats."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS FULL NETWORK REPORT\n")
+
+    network_name = input(
+        "Assessment name "
+        "[Cerberus Assessment Network]: "
+    ).strip()
+
+    if not network_name:
+        network_name = "Cerberus Assessment Network"
+
+    print("\n[*] Building full-network assessment report...\n")
+
+    try:
+        report = build_network_report(network_name)
+        paths = save_all_formats(report)
+    except ReportingError as error:
+        print(f"[!] Report generation failed: {error}")
+        pause()
+        return
+
+    print(f"[+] Hosts included: {report.summary.total_hosts}")
+    print(
+        f"[+] Open services: "
+        f"{report.summary.total_open_services}"
+    )
+
+    print("\nGenerated reports:")
+
+    for format_name, path in paths.items():
+        print(f"  - {format_name.upper():<10}{path}")
+
+    pause()
+
+
+def generate_host_report_menu() -> None:
+    """Generate reports for one inventory host."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS SINGLE HOST REPORT\n")
+
+    try:
+        inventory = load_inventory()
+    except InventoryError as error:
+        print(f"[!] Unable to load inventory: {error}")
+        pause()
+        return
+
+    if not inventory:
+        print("[!] Inventory is empty.")
+        pause()
+        return
+
+    hosts = sorted(
+        inventory.values(),
+        key=lambda item: tuple(
+            int(part)
+            for part in item.ip_address.split(".")
+        ),
+    )
+
+    for number, host in enumerate(hosts, start=1):
+        risk_level = str(
+            host.intelligence.get(
+                "risk_level",
+                "informational",
+            )
+        )
+
+        print(
+            f"[{number}] {host.ip_address:<18} "
+            f"Risk: {risk_level}"
+        )
+
+    print("[0] Cancel")
+
+    selection = input("\nSelect an asset: ").strip()
+
+    if selection == "0":
+        return
+
+    try:
+        host = hosts[int(selection) - 1]
+    except (ValueError, IndexError):
+        print("\n[!] Invalid asset selection.")
+        pause()
+        return
+
+    network_name = input(
+        "\nAssessment name "
+        "[Cerberus Assessment Network]: "
+    ).strip()
+
+    if not network_name:
+        network_name = "Cerberus Assessment Network"
+
+    print(f"\n[*] Building report for {host.ip_address}...\n")
+
+    try:
+        report = build_host_report(
+            host.ip_address,
+            network_name,
+        )
+        paths = save_all_formats(report)
+    except ReportingError as error:
+        print(f"[!] Report generation failed: {error}")
+        pause()
+        return
+
+    print("Generated reports:")
+
+    for format_name, path in paths.items():
+        print(f"  - {format_name.upper():<10}{path}")
+
+    pause()
+
+
+def view_existing_reports_menu() -> None:
+    """Display generated report files."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS EXISTING REPORTS\n")
+
+    reports = list_existing_reports()
+
+    if not reports:
+        print("[!] No reports have been generated yet.")
+        pause()
+        return
+
+    for number, report_path in enumerate(
+        reports[:30],
+        start=1,
+    ):
+        size_kb = report_path.stat().st_size / 1024
+
+        print(
+            f"[{number:>2}] "
+            f"{report_path.name:<58} "
+            f"{size_kb:>8.1f} KB"
+        )
+
+    print(
+        "\n[*] Reports are stored in: "
+        f"{reports[0].parent}"
+    )
+
+    pause()
+
+
+def run_reporting_menu() -> None:
+    """Launch the Cerberus reporting submenu."""
+    while True:
+        clear_screen()
+        print_banner()
+
+        print(
+            """
+CERBERUS REPORTING ENGINE
+
+[1] Generate Full Network Report
+[2] Generate Single Host Report
+[3] View Existing Reports
+[0] Return to Main Menu
+"""
+        )
+
+        selection = input("reports > ").strip()
+
+        if selection == "0":
+            return
+
+        if selection == "1":
+            generate_network_report_menu()
+            continue
+
+        if selection == "2":
+            generate_host_report_menu()
+            continue
+
+        if selection == "3":
+            view_existing_reports_menu()
+            continue
+
+        print("\n[!] Invalid selection.")
+        pause()
+
 def show_settings_menu() -> None:
     """Display the initial Cerberus settings interface."""
     clear_screen()
@@ -686,9 +879,7 @@ def build_menu_actions() -> dict[str, Callable[[], None]]:
         "4": run_asset_profiler_menu,
         "5": run_web_enumeration_menu,
         "6": run_device_intelligence_menu,
-        "7": lambda: show_planned_feature(
-            "CERBERUS REPORTING ENGINE"
-        ),
+        "7": run_reporting_menu,
         "8": lambda: show_planned_feature(
             "CERBERUS SPLUNK INTEGRATION"
         ),
@@ -721,7 +912,7 @@ def run_menu() -> None:
 
 ----------- REPORTING ------------
 
-[7] Reports                   [Not Installed]
+[7] Reports
 
 --------- SOC INTEGRATION --------
 
