@@ -1,0 +1,72 @@
+[
+  {
+    "timestamp": "2026-08-06T18:01:06.974763-04:00",
+    "export_type": "connection_test",
+    "status": "success",
+    "event_count": 1,
+    "message": "Success"
+  },
+  {
+    "timestamp": "2026-08-06T18:01:34.322117-04:00",
+    "export_type": "host_inventory",
+    "status": "success",
+    "event_count": 4,
+    "message": "Exported 4 of 4 inventory hosts."
+  },
+  {
+    "timestamp": "2026-08-06T18:58:08.873517-04:00",
+    "export_type": "device_intelligence",
+    "status": "success",
+    "event_count": 1,
+    "message": "Exported 1 of 1 Device Intelligence records."
+  },
+  {
+    "timestamp": "2026-08-06T18:58:08.876844-04:00",
+    "export_type": "security_findings",
+    "status": "success",
+    "event_count": 2,
+    "message": "Exported 2 of 2 security findings."
+  },
+  {
+    "timestamp": "2026-08-06T18:58:08.878498-04:00",
+    "export_type": "assessment_summary",
+    "status": "success",
+    "event_count": 1,
+    "message": "Network assessment summary exported."
+  },
+  {
+    "timestamp": "2026-08-06T19:36:10.136081-04:00",
+    "export_type": "connection_test",
+    "status": "success",
+    "event_count": 1,
+    "message": "Success"
+  },
+  {
+    "timestamp": "2026-08-06T19:36:41.816416-04:00",
+    "export_type": "host_inventory",
+    "status": "success",
+    "event_count": 4,
+    "message": "Exported 4 of 4 inventory hosts."
+  },
+  {
+    "timestamp": "2026-08-06T19:36:41.818181-04:00",
+    "export_type": "device_intelligence",
+    "status": "success",
+    "event_count": 1,
+    "message": "Exported 1 of 1 Device Intelligence records."
+  },
+  {
+    "timestamp": "2026-08-06T19:36:41.820494-04:00",
+    "export_type": "security_findings",
+    "status": "success",
+    "event_count": 2,
+    "message": "Exported 2 of 2 security findings."
+  },
+  {
+    "timestamp": "2026-08-06T19:36:41.821911-04:00",
+    "export_type": "assessment_summary",
+    "status": "success",
+    "event_count": 1,
+    "message": "Network assessment summary exported."
+  }
+]

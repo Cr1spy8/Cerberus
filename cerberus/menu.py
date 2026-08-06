@@ -48,6 +48,17 @@ from cerberus.modules.reporting import (
     list_existing_reports,
     save_all_formats,
 )
+from cerberus.modules.splunk_integration import (
+    SplunkIntegrationError,
+    export_all,
+    export_assessment_summary,
+    export_device_intelligence,
+    export_inventory,
+    export_security_findings,
+    load_export_history,
+    load_splunk_config,
+    test_connection,
+)
 
 def clear_screen() -> None:
     """Clear the terminal window."""
@@ -60,6 +71,8 @@ def pause() -> None:
 def print_banner() -> None:
     """Display the Cerberus application banner."""
     print(terminal_banner())
+
+
 
 def run_discovery_menu() -> None:
     """Run discovery and update the persistent inventory."""
@@ -678,7 +691,6 @@ def generate_network_report_menu() -> None:
 
     pause()
 
-
 def generate_host_report_menu() -> None:
     """Generate reports for one inventory host."""
     clear_screen()
@@ -831,6 +843,277 @@ CERBERUS REPORTING ENGINE
         print("\n[!] Invalid selection.")
         pause()
 
+def display_splunk_export_result(
+    export_name: str,
+    count: int,
+    errors: list[str],
+) -> None:
+    """Display the result of one Splunk export operation."""
+    print(f"\n{export_name}")
+    print("-" * 50)
+    print(f"[+] Events exported: {count}")
+
+    if errors:
+        print(f"[!] Errors: {len(errors)}")
+
+        for error in errors:
+            print(f"    - {error}")
+    else:
+        print("[+] Export completed without errors.")
+
+def test_splunk_connection_menu() -> None:
+    """Test the configured Splunk HEC connection."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS SPLUNK CONNECTION TEST\n")
+
+    try:
+        config = load_splunk_config()
+
+        print(f"HEC URL:    {config.hec_url}")
+        print(f"Index:      {config.index}")
+        print(f"Source:     {config.source}")
+        print("\n[*] Sending integration-test event...\n")
+
+        response = test_connection(config)
+
+    except SplunkIntegrationError as error:
+        print(f"[!] Splunk connection failed: {error}")
+        pause()
+        return
+
+    if response.success:
+        print("[+] Splunk HEC connection successful.")
+    else:
+        print("[!] Splunk responded, but rejected the event.")
+
+    print(f"[+] HTTP status: {response.status_code}")
+    print(f"[+] Response:    {response.message}")
+
+    pause()
+
+def export_inventory_menu() -> None:
+    """Export the current Cerberus inventory to Splunk."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS SPLUNK — HOST INVENTORY\n")
+
+    try:
+        config = load_splunk_config()
+        count, errors = export_inventory(config)
+    except SplunkIntegrationError as error:
+        print(f"[!] Inventory export failed: {error}")
+        pause()
+        return
+
+    display_splunk_export_result(
+        "Host Inventory Export",
+        count,
+        errors,
+    )
+
+    pause()
+
+def export_device_intelligence_menu() -> None:
+    """Export Device Intelligence records to Splunk."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS SPLUNK — DEVICE INTELLIGENCE\n")
+
+    try:
+        config = load_splunk_config()
+        count, errors = export_device_intelligence(config)
+    except SplunkIntegrationError as error:
+        print(f"[!] Device Intelligence export failed: {error}")
+        pause()
+        return
+
+    display_splunk_export_result(
+        "Device Intelligence Export",
+        count,
+        errors,
+    )
+
+    pause()
+
+
+def export_security_findings_menu() -> None:
+    """Export individual Cerberus findings to Splunk."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS SPLUNK — SECURITY FINDINGS\n")
+
+    try:
+        config = load_splunk_config()
+        count, errors = export_security_findings(config)
+    except SplunkIntegrationError as error:
+        print(f"[!] Security Findings export failed: {error}")
+        pause()
+        return
+
+    display_splunk_export_result(
+        "Security Findings Export",
+        count,
+        errors,
+    )
+
+    pause()
+
+
+def export_assessment_summary_menu() -> None:
+    """Export the current network assessment summary."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS SPLUNK — ASSESSMENT SUMMARY\n")
+
+    try:
+        config = load_splunk_config()
+        count, errors = export_assessment_summary(config)
+    except SplunkIntegrationError as error:
+        print(f"[!] Assessment export failed: {error}")
+        pause()
+        return
+
+    display_splunk_export_result(
+        "Assessment Summary Export",
+        count,
+        errors,
+    )
+
+    pause()
+
+def export_all_splunk_data_menu() -> None:
+    """Export every currently supported Cerberus dataset."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS SPLUNK — FULL EXPORT\n")
+
+    print(
+        "This operation exports:\n"
+        "  - Host Inventory\n"
+        "  - Device Intelligence\n"
+        "  - Security Findings\n"
+        "  - Assessment Summary\n"
+    )
+
+    confirmation = input(
+        "Continue with full export? [y/N]: "
+    ).strip().lower()
+
+    if confirmation not in {"y", "yes"}:
+        print("\n[*] Full export cancelled.")
+        pause()
+        return
+
+    try:
+        config = load_splunk_config()
+        results = export_all(config)
+    except SplunkIntegrationError as error:
+        print(f"[!] Full Splunk export failed: {error}")
+        pause()
+        return
+
+    total_exported = 0
+    total_errors = 0
+
+    for export_name, result in results.items():
+        count, errors = result
+        total_exported += count
+        total_errors += len(errors)
+
+        display_splunk_export_result(
+            export_name.replace("_", " ").title(),
+            count,
+            errors,
+        )
+
+    print("\n" + "=" * 50)
+    print(f"[+] Total events exported: {total_exported}")
+    print(f"[+] Total errors:          {total_errors}")
+
+    pause()
+
+def view_splunk_export_history_menu() -> None:
+    """Display the local Splunk export-history log."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS SPLUNK EXPORT HISTORY\n")
+
+    history = load_export_history()
+
+    if not history:
+        print("[!] No Splunk export history exists.")
+        pause()
+        return
+
+    print(
+        f"{'Timestamp':<34}"
+        f"{'Export Type':<24}"
+        f"{'Status':<18}"
+        f"{'Events':<8}"
+    )
+    print("-" * 84)
+
+    for entry in reversed(history[-30:]):
+        print(
+            f"{str(entry.get('timestamp', '')):<34}"
+            f"{str(entry.get('export_type', '')):<24}"
+            f"{str(entry.get('status', '')):<18}"
+            f"{str(entry.get('event_count', 0)):<8}"
+        )
+
+        message = str(entry.get("message", "")).strip()
+
+        if message:
+            print(f"    {message}")
+
+    pause()
+
+def run_splunk_integration_menu() -> None:
+    """Launch the Cerberus Splunk Integration submenu."""
+    while True:
+        clear_screen()
+        print_banner()
+
+        print(
+            """
+CERBERUS SPLUNK INTEGRATION
+
+[1] Test Splunk Connection
+[2] Export Host Inventory
+[3] Export Device Intelligence
+[4] Export Security Findings
+[5] Export Assessment Summary
+[6] Export All Cerberus Data
+[7] View Export History
+[0] Return to Main Menu
+"""
+        )
+
+        selection = input("splunk > ").strip()
+
+        if selection == "0":
+            return
+
+        actions = {
+            "1": test_splunk_connection_menu,
+            "2": export_inventory_menu,
+            "3": export_device_intelligence_menu,
+            "4": export_security_findings_menu,
+            "5": export_assessment_summary_menu,
+            "6": export_all_splunk_data_menu,
+            "7": view_splunk_export_history_menu,
+        }
+
+        action = actions.get(selection)
+
+        if action is None:
+            print("\n[!] Invalid selection.")
+            pause()
+            continue
+
+        action()
+
 def show_settings_menu() -> None:
     """Display the initial Cerberus settings interface."""
     clear_screen()
@@ -880,9 +1163,7 @@ def build_menu_actions() -> dict[str, Callable[[], None]]:
         "5": run_web_enumeration_menu,
         "6": run_device_intelligence_menu,
         "7": run_reporting_menu,
-        "8": lambda: show_planned_feature(
-            "CERBERUS SPLUNK INTEGRATION"
-        ),
+        "8": run_splunk_integration_menu,
         "9": lambda: show_planned_feature(
             "CERBERUS HONEYPOT"
         ),
@@ -916,7 +1197,7 @@ def run_menu() -> None:
 
 --------- SOC INTEGRATION --------
 
-[8] Splunk Integration        [Not Installed]
+[8] Splunk Integration
 [9] Honeypot                  [Not Installed]
 
 ------------ SYSTEM --------------
