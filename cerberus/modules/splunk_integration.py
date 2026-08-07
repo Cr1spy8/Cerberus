@@ -68,6 +68,16 @@ def load_splunk_config() -> SplunkConfig:
     settings = load_config()
     splunk_settings = settings.get("splunk", {})
 
+    token = os.environ.get(
+        "CERBERUS_HEC_TOKEN",
+        "",
+    ).strip()
+
+    if not token:
+        raise SplunkIntegrationError(
+            "CERBERUS_HEC_TOKEN is not set in this shell."
+        )
+
     hec_url = os.environ.get(
         "CERBERUS_HEC_URL",
         str(
@@ -77,6 +87,10 @@ def load_splunk_config() -> SplunkConfig:
             )
         ),
     ).strip()
+    hec_url = hec_url.rstrip("/")
+
+    if not hec_url.endswith("/services/collector/event"):
+        hec_url += "/services/collector/event"
 
     index = os.environ.get(
         "CERBERUS_SPLUNK_INDEX",
