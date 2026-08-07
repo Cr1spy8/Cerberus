@@ -59,6 +59,15 @@ from cerberus.modules.splunk_integration import (
     load_splunk_config,
     test_connection,
 )
+from cerberus.modules.honeypot import (
+    HoneypotError,
+    export_new_events_to_splunk,
+    honeypot_statistics,
+    honeypot_status,
+    load_honeypot_events,
+    start_honeypot,
+    stop_honeypot,
+)
 
 def clear_screen() -> None:
     """Clear the terminal window."""
@@ -1114,6 +1123,253 @@ CERBERUS SPLUNK INTEGRATION
 
         action()
 
+def start_honeypot_menu() -> None:
+    """Start the Cerberus HTTP honeypot."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS HONEYPOT — START\n")
+
+    try:
+        status = start_honeypot()
+    except HoneypotError as error:
+        print(f"[!] Unable to start honeypot: {error}")
+        pause()
+        return
+
+    print("[+] Honeypot started successfully.")
+    print(f"[+] PID:      {status['pid']}")
+    print(f"[+] Port:     {status['port']}")
+    print(
+        f"[+] URL:      "
+        f"http://<Cerberus-IP>:{status['port']}/"
+    )
+    print(f"[+] Log file: {status['event_log']}")
+
+    pause()
+
+
+def stop_honeypot_menu() -> None:
+    """Stop the running Cerberus honeypot."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS HONEYPOT — STOP\n")
+
+    confirmation = input(
+        "Stop the running honeypot? [y/N]: "
+    ).strip().lower()
+
+    if confirmation not in {"y", "yes"}:
+        print("\n[*] Stop cancelled.")
+        pause()
+        return
+
+    try:
+        stop_honeypot()
+    except HoneypotError as error:
+        print(f"[!] Unable to stop honeypot: {error}")
+        pause()
+        return
+
+    print("\n[+] Honeypot stopped.")
+
+    pause()
+
+
+def view_honeypot_status_menu() -> None:
+    """Display honeypot service state."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS HONEYPOT STATUS\n")
+
+    status = honeypot_status()
+
+    print(
+        f"Status:       "
+        f"{'RUNNING' if status['running'] else 'STOPPED'}"
+    )
+    print(f"PID:          {status['pid'] or '-'}")
+    print(f"Listen Host:  {status['host']}")
+    print(f"Listen Port:  {status['port']}")
+    print(f"Event Log:    {status['event_log']}")
+    print(f"Service Log:  {status['service_log']}")
+
+    pause()
+
+
+def view_recent_honeypot_events_menu() -> None:
+    """Display recently captured honeypot interactions."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS RECENT HONEYPOT EVENTS\n")
+
+    try:
+        events = load_honeypot_events(limit=20)
+    except HoneypotError as error:
+        print(f"[!] Unable to read events: {error}")
+        pause()
+        return
+
+    if not events:
+        print("[!] No honeypot interactions recorded.")
+        pause()
+        return
+
+    print(
+        f"{'Timestamp':<34}"
+        f"{'Source IP':<18}"
+        f"{'Method':<9}"
+        f"{'Path'}"
+    )
+    print("-" * 90)
+
+    for event in reversed(events):
+        print(
+            f"{str(event.get('timestamp', '')):<34}"
+            f"{str(event.get('source_ip', '')):<18}"
+            f"{str(event.get('http_method', '')):<9}"
+            f"{str(event.get('request_path', ''))}"
+        )
+
+        submitted_fields = event.get(
+            "submitted_fields",
+            {},
+        )
+
+        if submitted_fields:
+            print(
+                "    Submitted fields: "
+                f"{submitted_fields}"
+            )
+
+    pause()
+
+
+def view_honeypot_statistics_menu() -> None:
+    """Display interaction statistics."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS HONEYPOT STATISTICS\n")
+
+    try:
+        statistics = honeypot_statistics()
+    except HoneypotError as error:
+        print(f"[!] Unable to calculate statistics: {error}")
+        pause()
+        return
+
+    print(
+        f"Total Interactions:  "
+        f"{statistics['total_events']}"
+    )
+    print(
+        f"Unique Sources:      "
+        f"{statistics['unique_sources']}"
+    )
+
+    print("\nTop Sources:")
+
+    if statistics["top_sources"]:
+        for source, count in statistics["top_sources"]:
+            print(f"  - {source:<18} {count}")
+    else:
+        print("  - None")
+
+    print("\nHTTP Methods:")
+
+    if statistics["methods"]:
+        for method, count in statistics["methods"]:
+            print(f"  - {method:<10} {count}")
+    else:
+        print("  - None")
+
+    print("\nTop Requested Paths:")
+
+    if statistics["top_paths"]:
+        for path, count in statistics["top_paths"]:
+            print(f"  - {path:<40} {count}")
+    else:
+        print("  - None")
+
+    pause()
+
+
+def export_honeypot_events_menu() -> None:
+    """Export new honeypot events to Splunk."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS HONEYPOT — SPLUNK EXPORT\n")
+
+    try:
+        count, errors = export_new_events_to_splunk()
+    except HoneypotError as error:
+        print(f"[!] Honeypot export failed: {error}")
+        pause()
+        return
+
+    print(f"[+] New events exported: {count}")
+
+    if errors:
+        print(f"[!] Errors: {len(errors)}")
+
+        for error in errors:
+            print(f"    - {error}")
+    elif count == 0:
+        print("[*] No new honeypot events required export.")
+    else:
+        print("[+] Export completed without errors.")
+
+    pause()
+
+
+def run_honeypot_menu() -> None:
+    """Launch the Cerberus Honeypot submenu."""
+    while True:
+        clear_screen()
+        print_banner()
+
+        status = honeypot_status()
+
+        print(
+            f"""
+CERBERUS HONEYPOT
+
+Service Status:
+{'RUNNING' if status['running'] else 'STOPPED'}
+Port: {status['port']}
+
+[1] Start Honeypot
+[2] Stop Honeypot
+[3] View Status
+[4] View Recent Events
+[5] View Statistics
+[6] Export New Events to Splunk
+[0] Return to Main Menu
+"""
+        )
+
+        selection = input("honeypot > ").strip()
+
+        if selection == "0":
+            return
+
+        actions = {
+            "1": start_honeypot_menu,
+            "2": stop_honeypot_menu,
+            "3": view_honeypot_status_menu,
+            "4": view_recent_honeypot_events_menu,
+            "5": view_honeypot_statistics_menu,
+            "6": export_honeypot_events_menu,
+        }
+
+        action = actions.get(selection)
+
+        if action is None:
+            print("\n[!] Invalid selection.")
+            pause()
+            continue
+
+        action()
+
 def show_settings_menu() -> None:
     """Display the initial Cerberus settings interface."""
     clear_screen()
@@ -1164,9 +1420,7 @@ def build_menu_actions() -> dict[str, Callable[[], None]]:
         "6": run_device_intelligence_menu,
         "7": run_reporting_menu,
         "8": run_splunk_integration_menu,
-        "9": lambda: show_planned_feature(
-            "CERBERUS HONEYPOT"
-        ),
+        "9": run_honeypot_menu,
         "10": show_settings_menu,
     }
 
@@ -1198,7 +1452,7 @@ def run_menu() -> None:
 --------- SOC INTEGRATION --------
 
 [8] Splunk Integration
-[9] Honeypot                  [Not Installed]
+[9] Honeypot
 
 ------------ SYSTEM --------------
 

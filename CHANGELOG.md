@@ -186,3 +186,67 @@ After all ten modules are complete, Cerberus will be packaged and deployed as a 
 - Established Settings as Module 010.
 - Added an initial read-only Settings interface.
 - Defined deployment as the milestone following completion of all ten v1 modules.
+
+## v0.6.0-dev — Device Intelligence
+
+### Added
+
+- Added Module 006: Device Intelligence.
+- Added evidence-based device classification.
+- Added broad operating-system family inference.
+- Added product and web-banner clue aggregation.
+- Added confidence scoring.
+- Added exposure-based risk scoring.
+- Added structured findings and recommendations.
+- Added Device Intelligence JSON storage.
+- Added persistent inventory enrichment.
+- Integrated Device Intelligence into the appliance menu
+
+## v0.7.1-dev — Branding and Reporting Polish
+
+### Added
+
+- Added centralized Cerberus product branding.
+- Added the project motto: `Discover. Enumerate. Analyze. Report.`
+- Added consistent branding to the terminal interface.
+- Added an Overall Assessment section to HTML reports.
+- Added total finding and recommendation counts.
+- Added risk-specific report styling.
+- Added enhanced report footers.
+- Added a basic Cerberus installer and launcher generator.
+
+### Changed
+
+- Renamed the HTML report `Network` field to `Assessment`.
+- Improved HTML report spacing, hierarchy, and visual readability.
+
+## v0.8.0-dev — Splunk Integration
+
+### Added
+
+- Added Module 008: Splunk Integration.
+- Added HTTP Event Collector connection testing.
+- Added structured host-inventory exports.
+- Added Device Intelligence exports.
+- Added individual security-finding exports.
+- Added network assessment-summary exports.
+- Added full Cerberus dataset exports.
+- Added local export-history tracking.
+- Added an interactive Splunk Integration submenu.
+- Added environment-variable-based HEC token handling.
+
+## v0.9.0-dev — Honeypot
+
+### Added
+
+- Added Module 009: Honeypot.
+- Added a background HTTP management decoy.
+- Added start, stop, and status controls.
+- Added local JSONL interaction logging.
+- Added source address, HTTP method, path, and user-agent capture.
+- Added safe form-field inspection with password redaction.
+- Added recent-interaction and statistics views.
+- Added incremental Splunk export tracking.
+- Added structured `honeypot_interaction` Splunk events.
+- Integrated honeypot management into the Cerberus appliance menu.
+

@@ -298,16 +298,16 @@ The module performs controlled reconnaissance and does not attempt exploitation.
 
 ### Intelligence
 
-- [ ] Module 006 — Device Intelligence
+- [x] Module 006 — Device Intelligence
 
 ### Reporting
 
-- [ ] Module 007 — Reporting Engine
+- [x] Module 007 — Reporting Engine
 
 ### SOC Integration
 
-- [ ] Module 008 — Splunk Integration
-- [ ] Module 009 — Honeypot
+- [x] Module 008 — Splunk Integration
+- [x] Module 009 — Honeypot
 
 ### System
 
@@ -340,3 +340,40 @@ The module provides:
 - Persistent inventory enrichment
 
 Conclusions are treated as estimates and include supporting evidence. Cerberus prefers an unknown classification over unsupported certainty.
+
+## Installation
+
+From the Cerberus project directory:
+
+## Splunk Integration
+
+Cerberus can forward structured reconnaissance and assessment data to Splunk through the HTTP Event Collector.
+
+Supported event types include:
+
+- `integration_test`
+- `host_inventory`
+- `device_intelligence`
+- `security_finding`
+- `assessment_summary`
+
+The HEC token is loaded from the `CERBERUS_HEC_TOKEN` environment variable and is not stored in the source code.
+
+## Honeypot
+
+Cerberus includes a controlled HTTP management honeypot that records interactions without storing submitted passwords.
+
+Captured metadata includes:
+
+- Source IP and source port
+- Destination port
+- HTTP request method
+- Requested path
+- User agent
+- Selected non-sensitive submitted fields
+- Event timestamp and identifier
+
+Sensitive form values such as passwords and tokens are redacted before local storage or Splunk export.
+
+The development honeypot listens on TCP port `8081`.
+
