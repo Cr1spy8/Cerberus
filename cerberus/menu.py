@@ -68,6 +68,17 @@ from cerberus.modules.honeypot import (
     start_honeypot,
     stop_honeypot,
 )
+from cerberus.modules.settings import (
+    CONFIG_FILE,
+    configure_honeypot,
+    configure_network,
+    configure_reporting,
+    configure_splunk,
+    deployment_ready,
+    reset_config,
+    system_checks,
+    view_configuration,
+)
 
 def clear_screen() -> None:
     """Clear the terminal window."""
@@ -1370,31 +1381,150 @@ Port: {status['port']}
 
         action()
 
-def show_settings_menu() -> None:
-    """Display the initial Cerberus settings interface."""
+def show_system_status_menu() -> None:
+    """Display Cerberus deployment-readiness checks."""
     clear_screen()
     print_banner()
-    print("\nCERBERUS SETTINGS\n")
+    print("\nCERBERUS SYSTEM AND DEPENDENCY STATUS\n")
 
-    print("General")
-    print("-" * 40)
-    print("Application Version:    " + __version__)
-    print("Configuration Backend:  Planned")
-    print("Update Channel:         Development")
+    checks = system_checks()
 
-    print("\nScanning")
-    print("-" * 40)
-    print("Default Scan Profile:   Quick")
-    print("Automatic Interface:    Enabled")
-    print("Result Format:          JSON")
+    print(
+        f"{'Component':<22}"
+        f"{'Status':<18}"
+        f"Details"
+    )
+    print("-" * 90)
 
-    print("\nLogging")
-    print("-" * 40)
-    print("Local Result Storage:   Enabled")
-    print("Splunk Forwarding:      Not configured")
+    for check in checks:
+        print(
+            f"{check.name:<22}"
+            f"{check.status:<18}"
+            f"{check.details}"
+        )
 
-    print("\n[*] Editable settings will be added before v1.0.")
+    print("\n" + "=" * 90)
+
+    if deployment_ready(checks):
+        print(
+            "[+] All required Cerberus dependencies "
+            "are ready."
+        )
+    else:
+        print(
+            "[!] One or more required dependencies "
+            "are missing."
+        )
+
+    print(
+        "[i] Optional components may be unavailable "
+        "without blocking core operation."
+    )
+
     pause()
+
+
+def reset_configuration_menu() -> None:
+    """Reset persistent settings after confirmation."""
+    clear_screen()
+    print_banner()
+    print("\nCERBERUS RESET CONFIGURATION\n")
+
+    print(
+        "This restores the non-secret Cerberus settings "
+        "to their development defaults."
+    )
+    print(
+        "Inventory, scans, reports, logs, and Git history "
+        "will not be deleted."
+    )
+
+    confirmation = input(
+        "\nType RESET to continue: "
+    ).strip()
+
+    if confirmation != "RESET":
+        print("\n[*] Configuration reset cancelled.")
+        pause()
+        return
+
+    reset_config()
+
+    print("\n[+] Configuration restored to defaults.")
+    pause()
+
+def show_settings_menu() -> None:
+    """Launch the persistent Cerberus Settings menu."""
+    while True:
+        clear_screen()
+        print_banner()
+
+        print(
+            """
+CERBERUS SETTINGS
+
+[1] Network Settings
+[2] Splunk Integration Settings
+[3] Honeypot Settings
+[4] Reporting Settings
+[5] System and Dependency Status
+[6] View Current Configuration
+[7] Reset Configuration to Defaults
+[0] Return to Main Menu
+"""
+        )
+
+        selection = input("settings > ").strip()
+
+        if selection == "0":
+            return
+
+        if selection == "1":
+            clear_screen()
+            print_banner()
+            configure_network()
+            pause()
+            continue
+
+        if selection == "2":
+            clear_screen()
+            print_banner()
+            configure_splunk()
+            pause()
+            continue
+
+        if selection == "3":
+            clear_screen()
+            print_banner()
+            configure_honeypot()
+            pause()
+            continue
+
+        if selection == "4":
+            clear_screen()
+            print_banner()
+            configure_reporting()
+            pause()
+            continue
+
+        if selection == "5":
+            show_system_status_menu()
+            continue
+
+        if selection == "6":
+            clear_screen()
+            print_banner()
+            view_configuration()
+            print(f"\nConfiguration file: {CONFIG_FILE}")
+            pause()
+            continue
+
+        if selection == "7":
+            reset_configuration_menu()
+            continue
+
+        print("\n[!] Invalid selection.")
+        pause()
 
 def show_planned_feature(feature_name: str) -> None:
     """Display a placeholder for an upcoming Cerberus module."""

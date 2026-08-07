@@ -18,7 +18,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs
-
+from cerberus.modules.settings import get_setting
 from cerberus import __version__
 
 
@@ -70,6 +70,34 @@ def read_pid() -> int | None:
     except (OSError, ValueError):
         return None
 
+def configured_host() -> str:
+    """Return the configured honeypot listen address."""
+    return str(
+        get_setting(
+            "honeypot",
+            "listen_address",
+            DEFAULT_HOST,
+        )
+    )
+
+
+def configured_port() -> int:
+    """Return the configured honeypot listen port."""
+    try:
+        port = int(
+            get_setting(
+                "honeypot",
+                "port",
+                DEFAULT_PORT,
+            )
+        )
+    except (TypeError, ValueError):
+        return DEFAULT_PORT
+
+    if not 1 <= port <= 65535:
+        return DEFAULT_PORT
+
+    return port
 
 def process_is_running(pid: int) -> bool:
     """Return whether a local PID currently exists."""
@@ -97,8 +125,8 @@ def honeypot_status() -> dict[str, Any]:
     return {
         "running": running,
         "pid": pid if running else None,
-        "host": DEFAULT_HOST,
-        "port": DEFAULT_PORT,
+        "host": configured_host(),
+        "port": configured_port(),
         "event_log": str(EVENT_LOG_PATH),
         "service_log": str(SERVICE_LOG_PATH),
     }
@@ -129,9 +157,9 @@ def start_honeypot() -> dict[str, Any]:
                 "cerberus.modules.honeypot",
                 "--serve",
                 "--host",
-                DEFAULT_HOST,
+                configured_host(),
                 "--port",
-                str(DEFAULT_PORT),
+                str(configured_port()),
             ],
             cwd=PROJECT_ROOT,
             stdout=log_handle,

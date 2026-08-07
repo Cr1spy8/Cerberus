@@ -1,0 +1,47 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets and environment variables
+.env
+.env.*
+!.env.example
+*.token
+*.secret
+
+# Local Cerberus configuration
+config/cerberus.json
+
+# Runtime inventory
+inventory/*
+!inventory/.gitkeep
+
+# Generated scans
+scans/*
+!scans/.gitkeep
+
+# Generated reports
+reports/*
+!reports/.gitkeep
+
+# Runtime logs
+logs/*
+!logs/.gitkeep
+
+# Development targets
+test_web/
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

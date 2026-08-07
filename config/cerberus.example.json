@@ -1,0 +1,25 @@
+{
+  "application": {
+    "name": "Cerberus",
+    "version": "0.10.0-dev"
+  },
+  "network": {
+    "interface": "auto",
+    "scan_profile": "standard"
+  },
+  "splunk": {
+    "enabled": false,
+    "hec_url": "http://127.0.0.1:8088",
+    "index": "cerberus",
+    "source": "cerberus",
+    "sourcetype": "_json"
+  },
+  "honeypot": {
+    "listen_address": "0.0.0.0",
+    "port": 8081
+  },
+  "reporting": {
+    "output_directory": "reports",
+    "default_format": "html"
+  }
+}

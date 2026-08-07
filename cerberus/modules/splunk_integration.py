@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
-
+from cerberus.modules.settings import load_config
 from cerberus import __version__
 from cerberus.modules.inventory import (
     InventoryError,
@@ -65,39 +65,47 @@ class ExportHistoryEntry:
 
 
 def load_splunk_config() -> SplunkConfig:
-    """
-    Load Splunk configuration from environment variables.
-
-    The HEC token is intentionally not stored in source code.
-    """
-    token = os.environ.get(
-        "CERBERUS_HEC_TOKEN",
-        "",
-    ).strip()
-
-    if not token:
-        raise SplunkIntegrationError(
-            "CERBERUS_HEC_TOKEN is not set in this shell."
-        )
+    settings = load_config()
+    splunk_settings = settings.get("splunk", {})
 
     hec_url = os.environ.get(
         "CERBERUS_HEC_URL",
-        DEFAULT_HEC_URL,
+        str(
+            splunk_settings.get(
+                "hec_url",
+                DEFAULT_HEC_URL,
+            )
+        ),
     ).strip()
 
     index = os.environ.get(
         "CERBERUS_SPLUNK_INDEX",
-        DEFAULT_INDEX,
+        str(
+            splunk_settings.get(
+                "index",
+                DEFAULT_INDEX,
+            )
+        ),
     ).strip()
 
     source = os.environ.get(
         "CERBERUS_SPLUNK_SOURCE",
-        DEFAULT_SOURCE,
+        str(
+            splunk_settings.get(
+                "source",
+                DEFAULT_SOURCE,
+            )
+        ),
     ).strip()
 
     sourcetype = os.environ.get(
         "CERBERUS_SPLUNK_SOURCETYPE",
-        DEFAULT_SOURCETYPE,
+        str(
+            splunk_settings.get(
+                "sourcetype",
+                DEFAULT_SOURCETYPE,
+            )
+        ),
     ).strip()
 
     return SplunkConfig(
