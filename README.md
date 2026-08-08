@@ -1,379 +1,79 @@
 # Cerberus
 
-> A portable penetration testing appliance built on a TP-Link Archer C54 router.
+> Portable penetration-testing and network-assessment appliance for authorized security testing, asset discovery, SOC integration, and cybersecurity lab environments.
 
 ---
 
 ## Overview
 
-Cerberus is a modular offensive security platform designed to transform inexpensive consumer networking hardware into a dedicated penetration testing appliance.
+Cerberus is a modular cybersecurity platform designed to provide a centralized workflow for internal network reconnaissance, asset discovery, enumeration, device intelligence, reporting, honeypot monitoring, and defensive-security integration.
 
-Rather than acting as a general-purpose Linux system, Cerberus provides a centralized interface for reconnaissance, asset discovery, enumeration, reporting, and future exploitation modules.
+The project began as an experiment to determine whether inexpensive consumer networking hardware could be turned into a portable penetration-testing appliance. During development, the architecture evolved into a more capable design:
 
-The long-term objective is to create a self-contained platform capable of performing internal network assessments, maintaining persistent asset inventories, integrating with defensive monitoring platforms such as Splunk, and serving as a practical cybersecurity learning environment.
+- A **TP-Link Archer C54** provides the portable network backbone and access layer.
+- A dedicated **Linux system** runs the Cerberus application and security tooling.
+- **Splunk** can receive structured Cerberus telemetry through the HTTP Event Collector.
+- Persistent JSON storage maintains asset, scan, intelligence, and reporting data.
+
+Cerberus is designed for cybersecurity education, lab use, internal assessments, and authorized penetration testing.
 
 ---
 
 # Current Status
 
-Current Version: **v2.5**
+**Current Release Candidate:** `v1.0.0`
 
-Current Development Stage:
+Cerberus v1 includes ten completed modules:
 
-- ✅ Discovery Engine
-- ✅ Persistent Host Inventory
-- ✅ Interactive Appliance Interface
-- 🚧 Port Scanner
-- 🚧 Web Enumeration
-- 🚧 SMB Enumeration
-- 🚧 Reporting Engine
-- 🚧 Honeypot Integration
-- 🚧 Splunk Integration
+- ✅ Module 001 — Network Discovery
+- ✅ Module 002 — Persistent Host Inventory
+- ✅ Module 003 — Port Scanner
+- ✅ Module 004 — Asset Profiler
+- ✅ Module 005 — Web Enumeration
+- ✅ Module 006 — Device Intelligence
+- ✅ Module 007 — Reporting Engine
+- ✅ Module 008 — Splunk Integration
+- ✅ Module 009 — Honeypot
+- ✅ Module 010 — Settings and Configuration
 
----
+The application has also completed:
 
-# Current Features
-
-## Network Discovery
-
-- Automatic interface detection
-- Automatic subnet identification
-- Live host discovery using Nmap
-- Structured JSON output
-- Host discovery reasoning
-
----
-
-## Persistent Inventory
-
-Cerberus maintains a persistent inventory of every discovered host.
-
-For every device discovered it stores:
-
-- IP Address
-- Hostname
-- Discovery Status
-- Discovery Reason
-- First Seen
-- Last Seen
-- Number of Sightings
+- Clean-install testing
+- Fresh configuration initialization
+- Runtime-data isolation
+- Dependency validation
+- Splunk HEC testing
+- Honeypot testing
+- Full end-to-end regression testing
 
 ---
 
-## Interactive Appliance
-
-Cerberus now launches through a centralized menu.
-
-```
-=============================
- CERBERUS
- Portable Pentesting Appliance
-=============================
-
-1. Discover Network
-
-2. View Host Inventory
-
-3. Port Scanner
-
-4. Web Enumeration
-
-5. SMB Enumeration
-
-6. Reports
-
-7. Settings
-```
-
-Future modules will integrate directly into this interface.
-
----
-
-# Directory Structure
-
-```
-Cerberus/
-│
-├── cerberus/
-│   ├── cli.py
-│   ├── menu.py
-│   └── modules/
-│       ├── discovery.py
-│       └── inventory.py
-│
-├── config/
-├── dashboard/
-├── docs/
-├── inventory/
-├── payloads/
-├── reports/
-├── scans/
-├── tests/
-│
-├── README.md
-├── CHANGELOG.md
-└── requirements.txt
-```
-
----
-
-# Roadmap
-
-## Version 1.0
-
-- Hardware identified
-- Firmware researched
-- SSH access
-- Network configured
-- Logging enabled
-- Honeypot deployed
-- Logs visible in Splunk
-- Successful testing
-
----
-
-## Planned Modules
-Module 001 — Network Discovery
-Status: ✅ Complete
-
-Purpose:
-- Detect active network interface
-- Identify local subnet
-- Discover live hosts
-- Save JSON scan results
-
-Features:
-- Automatic interface detection
-- ARP/host discovery
-- JSON output
-- CLI integration
-- Persistent scan storage
-
-Module 002 — Persistent Inventory
-Status: ✅ Complete
-
-Purpose: Maintain a living database of discovered hosts
-
-Features:
-- Tracks first seen
-- Tracks last seen
-- Counts sightings
-- Updates automatically after discovery
-- JSON inventory
-- Service storage
-- Scan timestamps
-
-Module 003 — Port Scanner
-Status: ✅ Complete
-
-Purpose: Enumerate TCP services on discovered hosts
-
-Features:
-- Inventory-based target selection
-- Nmap integration
-- XML parsing
-- JSON reports
-- Inventory enrichment
-- Service/version detection
-- Structured output
-
-### Reconnaissance
-
-- Network Discovery
-- Host Inventory
-- Port Scanner
-- OS Detection
-- Service Enumeration
-
-### Web
-
-- HTTP Enumeration
-- HTTPS Enumeration
-- Directory Discovery
-- Technology Detection
-
-### Windows
-
-- SMB Enumeration
-- Share Discovery
-- LDAP Enumeration
-- Domain Information
-
-### Reporting
-
-- JSON Reports
-- HTML Reports
-- PDF Reports
-
-### Integrations
-
-- Splunk
-- Syslog
-- Honeypots
-
----
-
-# Technology Stack
-
-- Python 3
-- Nmap
-- JSON
-- Git
-- Kali Linux
-
-Future integrations:
-
-- Scapy
-- Impacket
-- Flask
-- SQLite
-- Splunk SDK
-
----
-
-# Project Goals
-
-Cerberus is intended to become a lightweight, modular penetration testing appliance capable of:
-
-- Internal network reconnaissance
-- Asset inventory
-- Enumeration
-- Security assessments
-- Honeypot deployment
-- Splunk integration
-- Automated reporting
-
-while remaining portable enough to operate from low-cost embedded hardware.
-
----
-
-# License
-
-Development Project
-
-Built for cybersecurity education, research, and authorized penetration testing.
-
-## Asset Profiler
-
-Cerberus enriches discovered hosts with additional identity and classification data.
-
-The profiler can record:
-
-- Hostname
-- MAC address
-- Network-interface vendor
-- Probable device type
-- Probable operating-system family
-- Service and port tags
-- Evidence supporting each classification
-
-Profile conclusions are treated as estimates unless confirmed by stronger scan evidence.
-
-## Web Enumeration
-
-Cerberus can enumerate HTTP and HTTPS services identified during port scanning.
-
-The module collects:
-
-- HTTP status and redirect destinations
-- Page titles
-- Server and content-type headers
-- Common security-header presence
-- robots.txt information
-- Basic TLS connection and certificate metadata
-- Structured JSON results
-- Persistent inventory enrichment
-
-The module performs controlled reconnaissance and does not attempt exploitation.
-
-## Cerberus v1 Module Roadmap
-
-### Reconnaissance
-
-- [x] Module 001 — Network Discovery
-- [x] Module 002 — Persistent Host Inventory
-- [x] Module 003 — Port Scanner
-- [x] Module 004 — Asset Profiler
-- [x] Module 005 — Web Enumeration
-
-### Intelligence
-
-- [x] Module 006 — Device Intelligence
-
-### Reporting
-
-- [x] Module 007 — Reporting Engine
-
-### SOC Integration
-
-- [x] Module 008 — Splunk Integration
-- [x] Module 009 — Honeypot
-
-### System
-
-- [ ] Module 010 — Settings
-
-## v1 Deployment Milestone
-
-After all ten modules are complete, Cerberus will be packaged and deployed as a standalone appliance using:
-
-- The TP-Link Archer C54 as the isolated network backbone
-- A dedicated Linux system as the Cerberus processing platform
-- Automatic startup
-- Dependency installation
-- Configuration persistence
-- End-to-end acceptance testing
-
-## Device Intelligence
-
-Cerberus combines discovery, service, profile, and web-enumeration evidence to produce an evidence-based device assessment.
-
-The module provides:
-
-- Broad device classification
-- Operating-system family inference
-- Product and vendor clues
-- Confidence scoring
-- Exposure-based risk scoring
-- Findings and recommendations
-- Structured JSON storage
-- Persistent inventory enrichment
-
-Conclusions are treated as estimates and include supporting evidence. Cerberus prefers an unknown classification over unsupported certainty.
-
-## Installation
-
-From the Cerberus project directory:
-
-## Splunk Integration
-
-Cerberus can forward structured reconnaissance and assessment data to Splunk through the HTTP Event Collector.
-
-Supported event types include:
-
-- `integration_test`
-- `host_inventory`
-- `device_intelligence`
-- `security_finding`
-- `assessment_summary`
-
-The HEC token is loaded from the `CERBERUS_HEC_TOKEN` environment variable and is not stored in the source code.
-
-## Honeypot
-
-Cerberus includes a controlled HTTP management honeypot that records interactions without storing submitted passwords.
-
-Captured metadata includes:
-
-- Source IP and source port
-- Destination port
-- HTTP request method
-- Requested path
-- User agent
-- Selected non-sensitive submitted fields
-- Event timestamp and identifier
-
-Sensitive form values such as passwords and tokens are redacted before local storage or Splunk export.
-
-The development honeypot listens on TCP port `8081`.
-
+# Core Workflow
+
+Cerberus is designed as a connected assessment workflow rather than a collection of unrelated scripts.
+
+```text
+Network Discovery
+        │
+        ▼
+Persistent Inventory
+        │
+        ▼
+Port Scanner
+        │
+        ▼
+Asset Profiler
+        │
+        ▼
+Web Enumeration
+        │
+        ▼
+Device Intelligence
+        │
+        ▼
+Reporting Engine
+        │
+        ├────────────► Splunk
+        │
+        ▼
+Honeypot Monitoring

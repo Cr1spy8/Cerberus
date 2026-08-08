@@ -1,252 +1,172 @@
 # Changelog
 
-## v0.1 - Project Initialization
+## v1.0.0 — Initial Stable Release
 
 ### Added
 
-- Initial project directory structure
-- Hardware documentation templates
-- Project goals document
-- Research notes
-- Version roadmap
+- Completed Module 001: Network Discovery.
+- Completed Module 002: Persistent Host Inventory.
+- Completed Module 003: Port Scanner.
+- Completed Module 004: Asset Profiler.
+- Completed Module 005: Web Enumeration.
+- Completed Module 006: Device Intelligence.
+- Completed Module 007: Reporting Engine.
+- Completed Module 008: Splunk Integration.
+- Completed Module 009: Honeypot.
+- Completed Module 010: Settings and Configuration.
 
-### Notes
+### Network Discovery
 
-Project initialized following a documentation-first approach. No hardware modifications have been performed.
+- Added automatic interface detection.
+- Added local subnet identification.
+- Added Nmap-based host discovery.
+- Added structured JSON discovery results.
+- Added persistent discovery history.
+- Added automatic inventory updates.
 
+### Persistent Inventory
 
-## v0.1.1
+- Added first-seen and last-seen tracking.
+- Added host sighting counters.
+- Added persistent service storage.
+- Added profiling, web-enumeration, and intelligence enrichment.
+- Added structured JSON host records.
 
-### Added
+### Port Scanner
 
-- Documented external hardware characteristics
-- Recorded power specifications
-- Recorded network interface layout
-- Began hardware profiling
+- Added inventory-based target selection.
+- Added Nmap TCP scanning.
+- Added service and version detection.
+- Added structured scan output.
+- Added inventory enrichment.
 
+### Asset Profiler
 
-## v0.1.2
+- Added MAC and vendor enrichment.
+- Added device-type classification.
+- Added operating-system-family inference.
+- Added evidence-based asset tags.
 
-### Added
+### Web Enumeration
 
-- Completed initial router setup
-- Configured isolated lab environment
-- Preserved factory firmware for analysis
-- Deferred Internet connectivity pending hardware and firmware assessment
-
-
-## v0.2.0
-
-### Added
-
-- Completed initial reconnaissance of the stock firmware interface.
-- Cataloged available networking and system management modules.
-- Identified key areas for future analysis (Backup & Restore, System Log, Administration, Diagnostics).
-- Decided to analyze the factory firmware before considering replacement firmware.
-
-
-## v0.2.1
-
-### Added
-
-- Performed initial network reconnaissance using Nmap.
-- Identified exposed management services.
-- Confirmed SSH, HTTP, and UPnP are accessible.
-- Established baseline network attack surface.
-
-
-## v0.2.2 - Firmware Reconnaissance
-
-### Completed
-- Enumerated network services with Nmap
-- Confirmed OpenSSH 6.6.0 via banner grabbing
-- Fingerprinted the HTTP interface with curl, Nikto, and WhatWeb
-- Identified jQuery-based web interface
-- Documented absence of HTTP server banner
-- Exported baseline configuration for future comparison
-
-### Next Objective
-- Analyze the web interface using browser Developer Tools and Burp Suite.
-- Download and inspect the factory firmware offline.
-
-
-## v0.2.3
-
-### Added
-
-- Created the Cerberus Python package.
-- Added a modular network-discovery engine.
-- Added automatic interface and subnet detection.
-- Added Nmap XML parsing.
-- Added JSON scan-result storage.
-- Added the initial Cerberus command-line interface.
-
-
-## v2.5 — Interactive Appliance Interface
-
-### Added
-
-- Added a centralized interactive Cerberus menu.
-- Integrated network discovery into the appliance interface.
-- Integrated persistent host inventory viewing.
-- Added placeholders for planned scanning, enumeration, reporting, and settings modules.
-- Configured the interactive menu as the default Cerberus behavior.
-- Added an optional system launcher for running Cerberus with a single command.
-
-### Current Menu
-
-1. Network Discovery
-2. Host Inventory
-3. Port Scanner — planned
-4. Web Enumeration — planned
-5. SMB Enumeration — planned
-6. Reports — planned
-7. Settings — planned
-
-
-## v2.7 — Asset Profiler
-
-### Added
-
-- Added Module 004: Asset Profiler.
-- Added reverse-hostname resolution.
-- Added local-network MAC address collection.
-- Added MAC vendor identification when available.
-- Added service-based operating-system family inference.
-- Added broad device-type classification.
-- Added evidence-backed asset tags.
-- Added structured asset-profile JSON storage.
-- Added asset profile enrichment to the persistent inventory.
-- Integrated the profiler into the Cerberus appliance menu.
-
-
-## v2.8 — Web Enumeration
-
-### Added
-
-- Added Module 005: Web Enumeration.
-- Added inventory-based web-target selection.
-- Added HTTP and HTTPS response collection.
-- Added redirect tracking.
-- Added HTML page-title extraction.
-- Added server and content-type identification.
-- Added common HTTP security-header analysis.
+- Added HTTP and HTTPS enumeration.
+- Added response-status and redirect tracking.
+- Added title and server-header collection.
+- Added security-header analysis.
 - Added robots.txt collection.
-- Added basic TLS protocol and certificate metadata.
-- Added structured web-enumeration JSON storage.
-- Added web intelligence enrichment to the persistent inventory.
-- Integrated web enumeration into the Cerberus appliance menu.
-## Cerberus v1 Module Roadmap
+- Added basic TLS metadata.
+- Added structured web-enumeration results.
 
-### Reconnaissance
+### Device Intelligence
 
-- [x] Module 001 — Network Discovery
-- [x] Module 002 — Persistent Host Inventory
-- [x] Module 003 — Port Scanner
-- [x] Module 004 — Asset Profiler
-- [x] Module 005 — Web Enumeration
-
-### Intelligence
-
-- [ ] Module 006 — Device Intelligence
+- Added evidence-based device classification.
+- Added confidence scoring.
+- Added exposure-based risk scoring.
+- Added security findings and recommendations.
+- Added structured intelligence storage.
+- Added persistent inventory enrichment.
 
 ### Reporting
 
-- [ ] Module 007 — Reporting Engine
+- Added single-host assessment reports.
+- Added full-network assessment reports.
+- Added JSON output.
+- Added Markdown output.
+- Added branded HTML output.
+- Added Executive Summary.
+- Added Overall Assessment.
+- Added Risk Distribution.
+- Added per-host findings and recommendations.
 
-### SOC Integration
+### Splunk Integration
 
-- [ ] Module 008 — Splunk Integration
-- [ ] Module 009 — Honeypot
-
-### System
-
-- [ ] Module 010 — Settings
-
-## v1 Deployment Milestone
-
-After all ten modules are complete, Cerberus will be packaged and deployed as a standalone appliance using:
-
-- The TP-Link Archer C54 as the isolated network backbone
-- A dedicated Linux system as the Cerberus processing platform
-- Automatic startup
-- Dependency installation
-- Configuration persistence
-- End-to-end acceptance testing
-
-## v0.5.1-dev — Interface and Roadmap Refresh
-
-### Changed
-
-- Added the application version to the Cerberus banner.
-- Reorganized the menu around reconnaissance, intelligence, reporting, SOC integration, and system functions.
-- Replaced the planned DNS Intelligence module with Device Intelligence.
-- Moved standalone SMB and DNS modules to the future roadmap.
-- Replaced planned-feature labels with `Not Installed`.
-- Established Settings as Module 010.
-- Added an initial read-only Settings interface.
-- Defined deployment as the milestone following completion of all ten v1 modules.
-
-## v0.6.0-dev — Device Intelligence
-
-### Added
-
-- Added Module 006: Device Intelligence.
-- Added evidence-based device classification.
-- Added broad operating-system family inference.
-- Added product and web-banner clue aggregation.
-- Added confidence scoring.
-- Added exposure-based risk scoring.
-- Added structured findings and recommendations.
-- Added Device Intelligence JSON storage.
-- Added persistent inventory enrichment.
-- Integrated Device Intelligence into the appliance menu
-
-## v0.7.1-dev — Branding and Reporting Polish
-
-### Added
-
-- Added centralized Cerberus product branding.
-- Added the project motto: `Discover. Enumerate. Analyze. Report.`
-- Added consistent branding to the terminal interface.
-- Added an Overall Assessment section to HTML reports.
-- Added total finding and recommendation counts.
-- Added risk-specific report styling.
-- Added enhanced report footers.
-- Added a basic Cerberus installer and launcher generator.
-
-### Changed
-
-- Renamed the HTML report `Network` field to `Assessment`.
-- Improved HTML report spacing, hierarchy, and visual readability.
-
-## v0.8.0-dev — Splunk Integration
-
-### Added
-
-- Added Module 008: Splunk Integration.
-- Added HTTP Event Collector connection testing.
-- Added structured host-inventory exports.
-- Added Device Intelligence exports.
-- Added individual security-finding exports.
-- Added network assessment-summary exports.
-- Added full Cerberus dataset exports.
+- Added HTTP Event Collector integration.
+- Added HEC connection testing.
+- Added host-inventory export.
+- Added Device Intelligence export.
+- Added security-finding export.
+- Added assessment-summary export.
+- Added full-dataset export.
 - Added local export-history tracking.
-- Added an interactive Splunk Integration submenu.
+- Added support for structured event types:
+  - `integration_test`
+  - `host_inventory`
+  - `device_intelligence`
+  - `security_finding`
+  - `assessment_summary`
+  - `honeypot_interaction`
 - Added environment-variable-based HEC token handling.
 
-## v0.9.0-dev — Honeypot
+### Honeypot
 
-### Added
+- Added controlled HTTP management honeypot.
+- Added background service start/stop controls.
+- Added recent-event viewing.
+- Added interaction statistics.
+- Added JSONL event logging.
+- Added source IP, source port, HTTP method, path, and user-agent capture.
+- Added password and token redaction.
+- Added incremental Splunk export support.
 
-- Added Module 009: Honeypot.
-- Added a background HTTP management decoy.
-- Added start, stop, and status controls.
-- Added local JSONL interaction logging.
-- Added source address, HTTP method, path, and user-agent capture.
-- Added safe form-field inspection with password redaction.
-- Added recent-interaction and statistics views.
-- Added incremental Splunk export tracking.
-- Added structured `honeypot_interaction` Splunk events.
-- Integrated honeypot management into the Cerberus appliance menu.
+### Settings and Configuration
 
+- Added persistent application configuration.
+- Added network settings.
+- Added Splunk HEC settings.
+- Added honeypot settings.
+- Added reporting settings.
+- Added configuration reset.
+- Added deployment-readiness and dependency checks.
+- Added local configuration template handling.
+- Added environment-variable support for secrets.
+
+### Deployment
+
+- Added hardened `install.sh`.
+- Added runtime-directory initialization.
+- Added clean configuration bootstrapping.
+- Added dependency validation.
+- Added Python source compilation validation.
+- Added `~/bin/cerberus` launcher installation.
+- Added clean-install and deployment testing.
+- Added runtime-data isolation through `.gitignore`.
+- Added deployment-specific configuration templates.
+
+### Security Improvements
+
+- Removed Python cache files from source control.
+- Removed generated scans, reports, logs, and inventory from source control.
+- Added secret-safe HEC token handling.
+- Added credential redaction in honeypot logging.
+- Added ignored local configuration.
+- Added tracked `cerberus.example.json` deployment template.
+
+### Fixed
+
+- Fixed Splunk token loading during clean deployment.
+- Fixed Splunk HEC endpoint construction.
+- Fixed deployment-specific HEC configuration handling.
+- Fixed multiple Python indentation and syntax issues discovered during modular development.
+- Fixed inventory enrichment behavior across scan and intelligence modules.
+
+### Validated
+
+Cerberus v1.0.0 completed clean-deployment and regression testing covering:
+
+- Fresh Git clone
+- Fresh installer execution
+- Launcher installation
+- Configuration initialization
+- Network discovery
+- Host inventory
+- Port scanning
+- Asset profiling
+- Web enumeration
+- Device Intelligence
+- Report generation
+- Splunk HEC connectivity
+- Full Splunk export
+- Honeypot operation
+- Settings persistence
+- Dependency checks
+- Runtime-data isolation
