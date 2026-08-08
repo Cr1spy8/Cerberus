@@ -62,6 +62,29 @@ The application has also completed:
 - Honeypot testing
 - Full end-to-end regression testing
 
+## Deployment Validation
+
+Cerberus v1.0.0 was validated from a clean production installation.
+
+Acceptance testing included:
+
+- Clean GitHub deployment
+- Installation under `/opt/cerberus`
+- Automatic interface and subnet detection
+- Live host discovery
+- Persistent inventory updates
+- TCP service enumeration
+- Asset profiling
+- HTTP enumeration
+- Device intelligence analysis
+- HTML/JSON/Markdown report generation
+- HTTP honeypot interaction capture
+- Sensitive form-field redaction
+- Splunk HEC event forwarding
+- Dual-NIC network operation
+- Secure HEC credential loading
+- Cold-boot persistence testing
+
 ---
 
 # Core Workflow
